@@ -14,15 +14,17 @@ class BuscarHotelRequest extends FormRequest
     public function rules()
     {
         return [
-            'destino' => 'required|string|max:255',
+           'destino' => 'required|string|max:255',
             'fecha_checkin' => 'required|date|after_or_equal:today',
             'fecha_checkout' => 'required|date|after:fecha_checkin',
             'huespedes' => 'required|integer|min:1',
             'categoria' => 'nullable|integer|min:1|max:5',
             'precio_maximo' => 'nullable|numeric|min:0',
-            'servicios' => 'nullable|array'
+            'servicios' => 'nullable|array',
+            'servicios.*' => 'string',
         ];
     }
+    
 
     public function messages()
     {

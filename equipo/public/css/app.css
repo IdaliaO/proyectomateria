@@ -1,6 +1,6 @@
 :root {
-    --color-primario: #004a99; /* Azul oscuro del logo */
-    --color-secundario: #ffcc00; /* Amarillo del logo */
+    --color-primario: #004a99; 
+    --color-secundario: #ffcc00; 
     --color-texto: #333333;
     --color-fondo: #f4f4f9;
 }

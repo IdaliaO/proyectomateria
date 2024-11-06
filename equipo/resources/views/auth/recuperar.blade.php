@@ -1,6 +1,4 @@
-<!-- resources/views/auth/recuperar.blade.php -->
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <h2>Recuperar Contraseña</h2>

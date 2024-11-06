@@ -1,11 +1,9 @@
 @extends('layouts.app')
-
 @section('titulo', 'Registro de Usuario')
-
 @section('contenido')
 <div class="container my-4">
     <h2 class="mb-4">Registro de Usuario</h2>
-    <form method="POST" action="{{ route('registro') }}">
+    <form method="POST" action="{{ route('registro.enviar') }}">
         @csrf
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
@@ -48,7 +46,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Registrarse</button>
     </form>
-
     @if(session('success'))
         <div class="alert alert-success mt-3">
             {{ session('success') }}

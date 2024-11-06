@@ -10,20 +10,16 @@ class VueloController extends Controller
 {
     public function inicio()
     {
-        return view('home'); // Asegúrate de que 'home' es el nombre de la vista de inicio.
+        return view('home'); 
     }
     public function mostrarFormularioBusqueda()
     {
         return view('vuelos.buscar');
     }
-    // Procesar la búsqueda de vuelos
     public function buscar(BuscarVueloRequest $request)
     {
-        // Consulta básica de vuelos
         $query = Vuelo::query();
-    
-        // Aplicar los filtros si están presentes en la solicitud
-        if ($request->filled('origen')) {
+            if ($request->filled('origen')) {
             $query->where('origen', 'like', '%' . $request->origen . '%');
         }
         if ($request->filled('destino')) {
@@ -51,7 +47,6 @@ class VueloController extends Controller
             $query->where('escalas', $request->escalas);
         }
     
-        // Obtener resultados
         $resultados = $query->get();
     
         return view('vuelos.resultados', compact('resultados'));

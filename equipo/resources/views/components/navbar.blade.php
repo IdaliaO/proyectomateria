@@ -1,4 +1,3 @@
-<!-- resources/views/components/navbar.blade.php -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{{ route('inicio') }}">
         <img src="{{ asset('images/logo.png') }}" alt="Logo Los Cardenales" style="width: 50px;">

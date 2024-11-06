@@ -1,11 +1,9 @@
 @extends('layouts.app')
-
 @section('titulo', 'Iniciar Sesión')
-
 @section('contenido')
 <div class="container my-4">
     <h2 class="mb-4">Iniciar Sesión</h2>
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login.enviar') }}">
         @csrf
         <div class="mb-3">
             <label for="email" class="form-label">Correo Electrónico</label>

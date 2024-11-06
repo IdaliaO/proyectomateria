@@ -12,13 +12,20 @@ class Hotel extends Model
     protected $fillable = [
         'nombre',
         'destino',
-        'categoria',
-        'precio_noche',
-        'disponibilidad',
-        'distancia_centro',
-        'servicios', // Esto puede ser una columna JSON que almacena múltiples servicios como 'wifi', 'piscina', etc.
-        'calificacion',
         'numero_estrellas',
-        // Otros campos necesarios
+        'precio_por_noche',
+        'capacidad',
+        'distancia_centro',
+        'servicios',
+        'calificacion',
+        'descripcion',
+        'politicas_cancelacion',
+        'fecha_disponible_desde',
+        'fecha_disponible_hasta',
     ];
+
+    protected $casts = [
+        'servicios' => 'array',
+    ];
+
 }

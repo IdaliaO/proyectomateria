@@ -16,7 +16,7 @@ class RegistroUsuarioRequest extends FormRequest
         return [
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             'telefono' => 'required|string|min:10|max:15',
             'password' => 'required|string|min:6|confirmed',
         ];
@@ -29,7 +29,6 @@ class RegistroUsuarioRequest extends FormRequest
             'apellido.required' => 'El apellido es obligatorio.',
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'Por favor, ingresa un correo electrónico válido.',
-            'email.unique' => 'Este correo electrónico ya está registrado.',
             'telefono.required' => 'El teléfono es obligatorio.',
             'telefono.min' => 'El teléfono debe tener al menos 10 caracteres.',
             'password.required' => 'La contraseña es obligatoria.',
@@ -38,4 +37,3 @@ class RegistroUsuarioRequest extends FormRequest
         ];
     }
 }
-

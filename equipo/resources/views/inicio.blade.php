@@ -1,6 +1,4 @@
-<!-- resources/views/inicio.blade.php -->
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <h1>Bienvenido a Los Cardenales</h1>
