@@ -1,27 +1,29 @@
 @extends('layouts.app')
+
 @section('titulo', 'Registro de Usuario')
+
 @section('contenido')
 <div class="container my-4">
+@csrf
     <h2 class="mb-4">Registro de Usuario</h2>
     <form method="POST" action="{{ route('registro.enviar') }}">
-        @csrf
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}">
+            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
             @error('nombre')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="apellido" class="form-label">Apellido</label>
-            <input type="text" name="apellido" class="form-control" value="{{ old('apellido') }}">
+            <input type="text" name="apellido" class="form-control" value="{{ old('apellido') }}" required>
             @error('apellido')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Correo Electrónico</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+            <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
             @error('email')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -35,14 +37,14 @@
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
-            <input type="password" name="password" class="form-control">
+            <input type="password" name="password" class="form-control" required>
             @error('password')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
-            <input type="password" name="password_confirmation" class="form-control">
+            <input type="password" name="password_confirmation" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Registrarse</button>
     </form>

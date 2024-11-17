@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Route;
 // Rutas de inicio
 Route::get('/', [VueloController::class, 'inicio'])->name('inicio');
 
+Route::get('/registro', [UsuarioController::class, 'mostrarRegistro'])->name('registro.mostrar');
+Route::post('/registro/enviar', [UsuarioController::class, 'registrar'])->name('registro.enviar');
+Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login.mostrar');
+Route::post('/login', [UsuarioController::class, 'autenticar'])->name('login.enviar');
+Route::post('/logout', [UsuarioController::class, 'logout'])->name('logout');
+
+
+
 // Rutas de vuelos y hoteles
 Route::get('/buscar-vuelos', [VueloController::class, 'mostrarFormularioBusqueda'])->name('buscar.vuelos');
 Route::get('/resultados-vuelos', [VueloController::class, 'buscar'])->name('resultados.vuelos');
@@ -18,12 +26,15 @@ Route::get('/hoteles/resultados', [HotelController::class, 'buscar'])->name('hot
 Route::get('/hoteles/detalle/{id}', [HotelController::class, 'mostrarDetalle'])->name('hoteles.detalle');
 
 // Rutas de registro e inicio de sesión
-Route::get('/registro', [UsuarioController::class, 'mostrarRegistro'])->name('registro.mostrar');
-Route::post('/registro', [UsuarioController::class, 'registrar'])->name('registro.enviar');
+
 Route::get('/clientes', [ClienteController::class, 'mostrar'])->name('clientes.mostrar');
 Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login.mostrar');
 Route::post('/login', [UsuarioController::class, 'autenticar'])->name('login.enviar');
 Route::post('/logout', [UsuarioController::class, 'logout'])->name('logout');
+
+
+
+
 
 // Recuperación de contraseña y doble autenticación
 Route::get('/recuperar', [UsuarioController::class, 'mostrarRecuperar'])->name('recuperar');
@@ -37,9 +48,9 @@ Route::post('/resetear-contrasena', [UsuarioController::class, 'resetearContrase
 // Rutas para reservaciones
 Route::get('/reservaciones', [ReservacionController::class, 'index'])->name('reservaciones');
 Route::middleware('auth')->group(function () {
-    Route::post('/reservar', [ReservacionController::class, 'agregarAlCarrito'])->name('reservar.agregar');
-    Route::get('/carrito', [ReservacionController::class, 'verCarrito'])->name('carrito');
-    Route::post('/confirmar', [ReservacionController::class, 'confirmarReservacion'])->name('reservar.confirmar');
+Route::post('/reservar', [ReservacionController::class, 'agregarAlCarrito'])->name('reservar.agregar');
+Route::get('/carrito', [ReservacionController::class, 'verCarrito'])->name('carrito');
+Route::post('/confirmar', [ReservacionController::class, 'confirmarReservacion'])->name('reservar.confirmar');
 });
 
 // Rutas de administración (solo para administrar vuelos, hoteles, usuarios, etc.)

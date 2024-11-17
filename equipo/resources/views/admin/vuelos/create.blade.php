@@ -1,5 +1,4 @@
 @extends('admin.dashboard')
-
 @section('content')
     <h2>Crear Nuevo Vuelo</h2>
 
