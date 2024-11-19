@@ -1,26 +1,20 @@
-@extends('admin.dashboard')
+@extends('layouts.admin')
 
-@section('content')
-    <h2>Gestión de Vuelos</h2>
+@section('titulo', 'Gestionar Vuelos')
 
-    <!-- Mensajes de éxito o error -->
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @elseif(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-
-    <!-- Botón para agregar un nuevo vuelo -->
-    <a href="{{ route('admin.vuelo.crear') }}" class="btn btn-primary mb-3">Agregar Vuelo</a>
-
-    <!-- Tabla de vuelos -->
+@section('contenido')
+<div class="container my-4">
+    <h2 class="mb-4">Vuelos Disponibles</h2>
+    <a href="{{ route('admin.vuelo.crear') }}" class="btn btn-success mb-3">Agregar Vuelo</a>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Aerolínea</th>
+                <th>Número de Vuelo</th>
                 <th>Origen</th>
                 <th>Destino</th>
-                <th>Fecha Salida</th>
+                <th>Precio</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -28,18 +22,21 @@
             @foreach($vuelos as $vuelo)
                 <tr>
                     <td>{{ $vuelo->id }}</td>
+                    <td>{{ $vuelo->aerolinea }}</td>
+                    <td>{{ $vuelo->numero_vuelo }}</td>
                     <td>{{ $vuelo->origen }}</td>
                     <td>{{ $vuelo->destino }}</td>
-                    <td>{{ $vuelo->fecha_salida }}</td>
+                    <td>{{ $vuelo->precio }}</td>
                     <td>
-                        <form action="{{ route('admin.vuelo.destroy', $vuelo->id) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('admin.vuelo.destroy', $vuelo->id) }}" method="POST" onsubmit="return confirm('¿Está seguro de eliminar este vuelo?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+</div>
 @endsection

@@ -4,52 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('titulo', 'Los Cardenales')</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-whatever" crossorigin="anonymous">
-
-    <!-- Estilo Personalizado -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-    <!-- Vite Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @yield('scripts')
 </head>
 
 <body>
-    <!-- Encabezado -->
-    <header class="navbar">
-        <div class="d-flex align-items-center">
-            <img src="{{ asset('images/logo1.png') }}" alt="Logo Los Cardenales" style="height: 50px;">
-            <h1 class="ms-3 text-white">Los Cardenales</h1>
-        </div>
-        <ul class="navbar-menu d-flex align-items-center">
-            <li><a href="{{ route('inicio') }}">Inicio</a></li>
-            <li><a href="{{ route('buscar.vuelos') }}">Buscar Vuelos</a></li>
-            <li><a href="{{ route('hoteles.buscar') }}">Buscar Hoteles</a></li>
-            
-            @if(session('autenticado'))
-                <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-outline-light">Cerrar Sesión</a></li>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-            @else
-                <li><a href="{{ route('registro.mostrar') }}" class="btn btn-outline-light">Registrarse</a></li>
-                <li><a href="{{ route('login.mostrar') }}" class="btn btn-outline-light ms-2">Iniciar sesión</a></li>
-            @endif
-        </ul>
-    </header>
+    <div class="d-flex flex-column min-vh-100">
+        <header class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="{{ route('inicio') }}">
+                    <img src="{{ asset('images/logo1.png') }}" alt="Logo Los Cardenales" style="height: 50px;">
+                    <h1 class="ms-3 text-white mb-0">Los Cardenales</h1>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContenido">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                        <li class="nav-item"><a href="{{ route('inicio') }}" class="nav-link">Inicio</a></li>
+                        <li class="nav-item"><a href="{{ route('buscar.vuelos') }}" class="nav-link">Buscar Vuelos</a></li>
+                        <li class="nav-item"><a href="{{ route('hoteles.buscar') }}" class="nav-link">Buscar Hoteles</a></li>
+                        @if(session('autenticado'))
+                            <li class="nav-item">
+                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="nav-link">Cerrar Sesión</a>
+                            </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('registro.mostrar') }}" class="btn btn-outline-custom me-2">Registrarse</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('login.mostrar') }}" class="btn btn-outline-custom">Iniciar sesión</a>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <main class="flex-fill">
+            @yield('contenido')
+        </main>
+        <footer class="footer bg-dark text-white text-center py-3 mt-auto">
+            <p class="mb-0">&copy; 2024 Los Cardenales. Todos los derechos reservados.</p>
+        </footer>
+    </div> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Contenido Principal -->
-    <main class="content my-4">
-        @yield('contenido')
-    </main>
-
-    <!-- Pie de página -->
-    <footer class="footer">
-        <p>&copy; 2024 Los Cardenales. Todos los derechos reservados.</p>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha384-whatever" crossorigin="anonymous"></script>
 </body>
 </html>

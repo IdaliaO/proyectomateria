@@ -3,57 +3,90 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\BuscarHotelRequest;
-use App\Models\Hotel;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use App\Http\Requests\HotelRequest;
 
 class HotelController extends Controller
 {
-    public function mostrarFormularioBusqueda()
+    public function listarHoteles()
     {
-        return view('hoteles.buscar');
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la gestión de hoteles.');
+        }
+
+        $hoteles = DB::table('hoteles')->get();
+        return view('admin.hoteles.index', compact('hoteles'));
     }
-    public function buscar(BuscarHotelRequest $request)
+    public function crearHotelFormulario()
     {
-        \Log::info('Búsqueda de hotel iniciada', $request->all());
-        $query = Hotel::query();
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la creación de hoteles.');
+        }
+
+        return view('admin.hoteles.crear');
+    }
+
+    public function crearHotel(HotelRequest $request)
+    {
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
+        }
+        DB::table('hoteles')->insert([
+            'nombre' => $request->nombre,
+            'ubicacion' => $request->ubicacion,
+            'categoria' => $request->categoria,
+            'precio_noche' => $request->precio_noche,
+            'disponibilidad' => $request->disponibilidad,
+            'servicios' => json_encode($request->servicios), 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel creado correctamente.');
+    }
+    public function eliminarHotel($id)
+    {
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
+        }
+
+        DB::table('hoteles')->where('id', $id)->delete();
+        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel eliminado correctamente.');
+    }
+    public function mostrarHotel($id)
+    {
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la información del hotel.');
+        }
+
+        $hotel = DB::table('hoteles')->where('id', $id)->first();
+        if (!$hotel) {
+            return redirect()->route('admin.hoteles.index')->with('error', 'Hotel no encontrado.');
+        }
+
+        return view('admin.hoteles.mostrar', compact('hotel'));
+    }
+    public function buscarHoteles(HotelRequest $request)
+    {
+        $query = DB::table('hoteles');
         if ($request->filled('destino')) {
-            $query->where('destino', 'like', '%' . $request->destino . '%');
-        }
-        if ($request->filled('fecha_checkin') && $request->filled('fecha_checkout')) {
-            $query->where('fecha_disponible_desde', '<=', $request->fecha_checkin)
-                  ->where('fecha_disponible_hasta', '>=', $request->fecha_checkout);
-        }
-        if ($request->filled('huespedes')) {
-            $query->where('capacidad', '>=', $request->huespedes);
+            $query->where('ubicacion', 'LIKE', '%' . $request->destino . '%');
         }
         if ($request->filled('categoria')) {
-            $query->where('numero_estrellas', $request->categoria);
+            $query->where('categoria', $request->categoria);
         }
-        if ($request->filled('precio_minimo')) {
-            $query->where('precio_por_noche', '>=', $request->precio_minimo);
-        }
-        if ($request->filled('precio_maximo')) {
-            $query->where('precio_por_noche', '<=', $request->precio_maximo);
-        }
-        if ($request->filled('distancia_maxima')) {
-            $query->where('distancia_centro', '<=', $request->distancia_maxima);
+        if ($request->filled('precio_min') && $request->filled('precio_max')) {
+            $query->whereBetween('precio_noche', [$request->precio_min, $request->precio_max]);
         }
         if ($request->filled('servicios')) {
             foreach ($request->servicios as $servicio) {
-                $query->whereJsonContains('servicios', $servicio);
+                $query->where('servicios', 'LIKE', '%' . $servicio . '%');
             }
         }
-        $resultados = $query->get();
-        if ($resultados->isEmpty()) {
-            \Log::info('No se encontraron resultados para la búsqueda de hoteles.');
-        } else {
-            \Log::info('Se encontraron resultados para la búsqueda de hoteles.', ['resultados' => $resultados]);
-        }
-        return view('hoteles.resultados', compact('resultados'));
-    }
-    public function mostrarDetalle($id)
-    {
-        $hotel = Hotel::findOrFail($id);
-        return view('hoteles.detalle', compact('hotel'));
+
+        $hoteles = $query->get();
+
+        return view('hoteles.resultados', compact('hoteles'));
     }
 }

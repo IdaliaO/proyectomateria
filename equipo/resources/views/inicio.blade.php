@@ -4,13 +4,13 @@
 
 @section('contenido')
 <div class="container my-4">
-    <!-- Sección de Encabezado -->
+  
     <div class="text-center mb-4">
         <h1 class="mt-3">Explora y Reserva con Los Cardenales</h1>
         <p class="lead">Encuentra los mejores vuelos y alojamientos para tu viaje</p>
     </div>
 
-    <!-- Formulario de Búsqueda -->
+   
     <div class="card p-4 mb-5 shadow-sm">
         <h3 class="mb-4 text-center">Busca tu viaje ideal</h3>
         <ul class="nav nav-tabs mb-3 justify-content-center" id="searchTab" role="tablist">
@@ -22,7 +22,7 @@
             </li>
         </ul>
         <div class="tab-content" id="searchTabContent">
-            <!-- Formulario de Búsqueda de Vuelos -->
+           
             <div class="tab-pane fade @if(old('form_type') === 'vuelos' || !old('form_type')) show active @endif" id="vuelos" role="tabpanel" aria-labelledby="vuelos-tab">
                 <form action="{{ route('resultados.vuelos') }}" method="GET" class="row g-3">
                     <input type="hidden" name="form_type" value="vuelos">
@@ -100,43 +100,71 @@
                         @enderror
                     </div>
 
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">Buscar Vuelos</button>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Buscar Vuelos</button>
                     </div>
                 </form>
             </div>
 
-            <!-- Formulario de Búsqueda de Hoteles -->
+          
             <div class="tab-pane fade @if(old('form_type') === 'hoteles') show active @endif" id="hoteles" role="tabpanel" aria-labelledby="hoteles-tab">
-    <form action="{{ route('hoteles.resultados') }}" method="GET" class="row g-3">
-        <input type="hidden" name="form_type" value="hoteles">
-        <div class="col-md-6">
-            <label for="destino" class="form-label">Destino</label>
-            <input type="text" name="destino" class="form-control" value="{{ old('destino') }}">
-            @error('destino')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="col-md-3">
-            <label for="fecha_checkin" class="form-label">Fecha de Check-in</label>
-            <input type="date" name="fecha_checkin" class="form-control" value="{{ old('fecha_checkin') }}">
-            @error('fecha_checkin')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="col-md-3">
-            <label for="fecha_checkout" class="form-label">Fecha de Check-out</label>
-            <input type="date" name="fecha_checkout" class="form-control" value="{{ old('fecha_checkout') }}">
-            @error('fecha_checkout')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="col-md-4 offset-md-4 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Buscar Hoteles</button>
-        </div>
-    </form>
-</div>
+                <form action="{{ route('hoteles.resultados') }}" method="GET" class="row g-3">
+                    <input type="hidden" name="form_type" value="hoteles">
+                    <div class="col-md-6">
+                        <label for="destino" class="form-label">Destino</label>
+                        <input type="text" name="destino" class="form-control" value="{{ old('destino') }}">
+                        @error('destino')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-3">
+                        <label for="fecha_checkin" class="form-label">Fecha de Check-in</label>
+                        <input type="date" name="fecha_checkin" class="form-control" value="{{ old('fecha_checkin') }}">
+                        @error('fecha_checkin')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-3">
+                        <label for="fecha_checkout" class="form-label">Fecha de Check-out</label>
+                        <input type="date" name="fecha_checkout" class="form-control" value="{{ old('fecha_checkout') }}">
+                        @error('fecha_checkout')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Buscar Hoteles</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+@endsection
+@section('scripts')
+@if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+@endif
 @endsection

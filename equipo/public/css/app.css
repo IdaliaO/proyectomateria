@@ -1,74 +1,58 @@
+
 :root {
-    --color-primario: #004a99; 
-    --color-secundario: #ffcc00; 
+    --color-primario: #004a99;  /* Azul */
+    --color-secundario: #ffcc00; /* Amarillo */
     --color-texto: #333333;
     --color-fondo: #f4f4f9;
 }
 
+
 body {
     font-family: Arial, sans-serif;
     background-color: var(--color-fondo);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
     margin: 0;
 }
 
+
 .navbar {
     background-color: var(--color-primario);
-    padding: 1rem 2rem;
+}
+
+.navbar-brand h1 {
     color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
-.navbar img {
-    height: 50px;
-    margin-right: 1rem;
-}
-
-.navbar-menu {
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-}
-
-.navbar-menu li a {
+.navbar-nav .nav-link {
     color: #fff;
-    text-decoration: none;
     font-weight: bold;
     padding: 0.5rem 1rem;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: var(--color-secundario);
+    color: var(--color-primario);
     border-radius: 5px;
 }
 
-.navbar-menu li a:hover {
-    background-color: var(--color-secundario);
-    color: var(--color-primario);
-}
-
-.search-bar {
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-secundario);
-    padding: 1rem;
-    border-radius: 8px;
-}
-
-.search-form input, .search-form button {
-    font-size: 1rem;
-    padding: 0.5rem;
-}
-
-.search-form button {
-    background-color: var(--color-secundario);
-    color: var(--color-primario);
+.btn-outline-custom {
+    border-color: var(--color-secundario);
+    color: var(--color-secundario);
     font-weight: bold;
-    border: none;
-    cursor: pointer;
 }
 
-.search-form button:hover {
-    background-color: #ffdd33;
+.btn-outline-custom:hover {
+    background-color: var(--color-secundario);
+    color: var(--color-primario);
+    border-color: var(--color-secundario);
+}
+
+
+.navbar-toggler {
+    border-color: #fff;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox%3D%270 0 30 30%27 xmlns%3D%27http://www.w3.org/2000/svg%27%3E%3Cpath stroke%3D%27rgba%28255, 255, 255, 1%29%27 stroke-width%3D%272%27 stroke-linecap%3D%27round%27 stroke-miterlimit%3D%2710%27 d%3D%27M4 7h22M4 15h22M4 23h22%27/%3E%3C/svg%3E");
 }
 
 .footer {
@@ -76,8 +60,5 @@ body {
     color: #fff;
     text-align: center;
     padding: 1rem;
-    margin-top: auto;
     width: 100%;
-    position: fixed;
-    bottom: 0;
 }

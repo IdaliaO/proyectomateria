@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Administración</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+<!-- resources/views/admin/dashboard.blade.php -->
+@extends('layouts.admin')
 
-<div class="container mt-5">
-    <h1 class="text-center">Panel de Administración</h1>
+@section('titulo', 'Dashboard')
 
-    <div class="row">
+@section('contenido')
+    <h1 class="text-center">Bienvenido al Panel de Administración</h1>
+    <div class="row mt-4">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
@@ -42,10 +36,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Agregar más tarjetas según lo necesites -->
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

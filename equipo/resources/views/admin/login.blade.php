@@ -1,9 +1,11 @@
-@extends('layouts.app')
-@section('titulo', 'Iniciar Sesión')
+@extends('layouts.admin')
+
+@section('titulo', 'Login Administrador')
+
 @section('contenido')
 <div class="container my-4">
-    <h2 class="mb-4">Iniciar Sesión</h2>
-    <form method="POST" action="{{ route('login.enviar') }}">
+    <h2 class="mb-4 text-center">Login del Administrador</h2>
+    <form method="POST" action="{{ route('admin.login') }}">
         @csrf
         <div class="mb-3">
             <label for="email" class="form-label">Correo Electrónico</label>
@@ -14,7 +16,7 @@
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
-            <input type="password" name="password" class="form-control">
+            <input type="password" name="password" class="form-control" >
             @error('password')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
