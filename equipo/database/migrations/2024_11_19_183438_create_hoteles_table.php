@@ -12,11 +12,12 @@ class CreateHotelesTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('ubicacion');
-            $table->integer('estrellas');
-            $table->decimal('precio_por_noche', 10, 2);
-            $table->integer('disponibilidad');
-            $table->text('descripcion');
-            $table->text('politica_cancelacion')->nullable();
+            $table->integer('categoria'); 
+            $table->decimal('precio_noche', 8, 2);
+            $table->integer('disponibilidad'); 
+            $table->text('descripcion')->nullable();
+            $table->text('politicas_cancelacion')->nullable();
+            $table->string('fotografia')->nullable(); 
             $table->timestamps();
         });
     }

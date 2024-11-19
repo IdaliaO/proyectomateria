@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VueloRequest;
+use App\Http\Requests\HotelRequest;
 use App\Http\Requests\RegistroAdministradorRequest; 
 
 use Illuminate\Http\Request;
@@ -114,111 +115,7 @@ class AdministradorController extends Controller
         DB::table('users')->where('id', $id)->delete();
         return redirect()->route('admin.usuarios.index')->with('success', 'Usuario eliminado correctamente.');
     }
-
-    public function listarVuelos()
-    {
-        if (!Session::has('admin_autenticado')) {
-            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la gestión de vuelos.');
-        }
-
-        $vuelos = DB::table('vuelos')->get();
-        return view('admin.vuelos.index', compact('vuelos'));
-    }
-
-    public function crearVueloFormulario()
-    {
-        if (!Session::has('admin_autenticado')) {
-            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la creación de vuelos.');
-        }
-
-        return view('admin.vuelos.crear');
-    }
-
-    public function crearVuelo(VueloRequest $request)
-    {
-        // Los datos ya están validados automáticamente gracias al VueloRequest
-        DB::table('vuelos')->insert([
-            'aerolinea' => $request->aerolinea,
-            'numero_vuelo' => $request->numero_vuelo,
-            'origen' => $request->origen,
-            'destino' => $request->destino,
-            'fecha_salida' => $request->fecha_salida,
-            'fecha_llegada' => $request->fecha_llegada,
-            'precio' => $request->precio,
-            'disponibilidad' => $request->disponibilidad,
-            'clase' => $request->clase,
-            'escalas' => $request->escalas,
-            'politica_cancelacion' => $request->politica_cancelacion,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     
-        return redirect()->route('admin.vuelos.index')->with('success', 'Vuelo creado correctamente.');
-    }
-    
-    
-    public function eliminarVuelo($id)
-    {
-        if (!Session::has('admin_autenticado')) {
-            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
-        }
-
-        DB::table('vuelos')->where('id', $id)->delete();
-        return redirect()->route('admin.vuelos.index')->with('success', 'Vuelo eliminado correctamente.');
-    }
-
-    public function listarHoteles()
-    {
-        if (!Session::has('admin_autenticado')) {
-            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la gestión de hoteles.');
-        }
-
-        $hoteles = DB::table('hoteles')->get();
-        return view('admin.hoteles.index', compact('hoteles'));
-    }
-
-    public function crearHotelFormulario()
-    {
-        if (!Session::has('admin_autenticado')) {
-            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la creación de hoteles.');
-        }
-
-        return view('admin.hoteles.crear');
-    }
-
-    public function crearHotel(Request $request)
-    {
-        if (!Session::has('admin_autenticado')) {
-            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
-        }
-
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'ubicacion' => 'required|string|max:255',
-            'tarifa' => 'required|numeric|min:0',
-            'disponibilidad' => 'required|integer|min:0',
-        ]);
-
-        DB::table('hoteles')->insert([
-            'nombre' => $request->nombre,
-            'ubicacion' => $request->ubicacion,
-            'tarifa' => $request->tarifa,
-            'disponibilidad' => $request->disponibilidad,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel creado correctamente.');
-    }
-
-    public function eliminarHotel($id)
-    {
-        if (!Session::has('admin_autenticado')) {
-            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
-        }
-
-        DB::table('hoteles')->where('id', $id)->delete();
-        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel eliminado correctamente.');
-    }
 
     public function listarReservaciones()
     {
@@ -304,5 +201,168 @@ public function registrar(RegistroAdministradorRequest $request)
 
     return redirect()->route('admin.dashboard')->with('success', 'Administrador registrado correctamente.');
 }
+
+//VUELOS
+
+public function editarVueloFormulario($id)
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a esta página.');
+    }
+
+    $vuelo = DB::table('vuelos')->where('id', $id)->first();
+    if (!$vuelo) {
+        return redirect()->route('admin.vuelos.index')->with('error', 'Vuelo no encontrado.');
+    }
+
+    return view('admin.vuelos.editar', compact('vuelo'));
+}
+
+public function actualizarVuelo(Request $request, $id)
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a esta página.');
+    }
+
+    $request->validate([
+        'aerolinea' => 'required|string|max:255',
+        'numero_vuelo' => 'required|string|max:255',
+        'origen' => 'required|string|max:255',
+        'destino' => 'required|string|max:255',
+        'fecha_salida' => 'required|date',
+        'fecha_llegada' => 'required|date|after:fecha_salida',
+        'precio' => 'required|numeric|min:0',
+        'disponibilidad_asientos' => 'required|integer|min:1',
+        'clase' => 'required|in:economica,ejecutiva,primera',
+        'escalas' => 'required|boolean',
+        'politica_cancelacion' => 'nullable|string',
+    ]);
+
+    DB::table('vuelos')->where('id', $id)->update([
+        'aerolinea' => $request->aerolinea,
+        'numero_vuelo' => $request->numero_vuelo,
+        'origen' => $request->origen,
+        'destino' => $request->destino,
+        'fecha_salida' => $request->fecha_salida,
+        'fecha_llegada' => $request->fecha_llegada,
+        'precio' => $request->precio,
+        'disponibilidad' => $request->disponibilidad_asientos,
+        'clase' => $request->clase,
+        'escalas' => $request->escalas,
+        'politica_cancelacion' => $request->politica_cancelacion,
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->route('admin.vuelos.index')->with('success', 'Vuelo actualizado correctamente.');
+}
+public function listarVuelos()
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la gestión de vuelos.');
+    }
+
+    $vuelos = DB::table('vuelos')->get();
+    return view('admin.vuelos.index', compact('vuelos'));
+}
+
+public function crearVueloFormulario()
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la creación de vuelos.');
+    }
+
+    return view('admin.vuelos.crear');
+}
+
+public function crearVuelo(VueloRequest $request)
+{
+    
+    DB::table('vuelos')->insert([
+        'aerolinea' => $request->aerolinea,
+        'numero_vuelo' => $request->numero_vuelo,
+        'origen' => $request->origen,
+        'destino' => $request->destino,
+        'fecha_salida' => $request->fecha_salida,
+        'fecha_llegada' => $request->fecha_llegada,
+        'precio' => $request->precio,
+        'disponibilidad' => $request->disponibilidad_asientos, 
+        'clase' => $request->clase,
+        'escalas' => $request->escalas,
+        'politica_cancelacion' => $request->politica_cancelacion,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->route('admin.vuelos.index')->with('success', 'Vuelo creado correctamente.');
+}
+
+
+public function eliminarVuelo($id)
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
+    }
+
+    DB::table('vuelos')->where('id', $id)->delete();
+    return redirect()->route('admin.vuelos.index')->with('success', 'Vuelo eliminado correctamente.');
+}
+
+
+//hoteles
+public function listarHoteles()
+    {
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la gestión de hoteles.');
+        }
+
+        $hoteles = DB::table('hoteles')->get();
+        return view('admin.hoteles.index', compact('hoteles'));
+    }
+
+    public function crearHotelFormulario()
+    {
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a la creación de hoteles.');
+        }
+
+        $servicios = DB::table('servicios')->get(); 
+        return view('admin.hoteles.crear', compact('servicios'));
+    }
+
+    public function crearHotel(HotelRequest $request)
+    {
+        $hotelId = DB::table('hoteles')->insertGetId([
+            'nombre' => $request->nombre,
+            'ubicacion' => $request->ubicacion,
+            'categoria' => $request->categoria,
+            'precio_noche' => $request->precio_noche,
+            'disponibilidad' => $request->disponibilidad,
+            'descripcion' => $request->descripcion,
+            'politicas_cancelacion' => $request->politicas_cancelacion,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        if ($request->servicios) {
+            foreach ($request->servicios as $servicioId) {
+                DB::table('hotel_servicio')->insert([
+                    'hotel_id' => $hotelId,
+                    'servicio_id' => $servicioId,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel creado correctamente.');
+    }
+
+    public function eliminarHotel($id)
+    {
+        if (!Session::has('admin_autenticado')) {
+            return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
+        }
+
+        DB::table('hoteles')->where('id', $id)->delete();
+        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel eliminado correctamente.');
+    }
 
 }

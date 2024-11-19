@@ -43,8 +43,13 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="servicios" class="form-label">Servicios (separados por comas)</label>
-            <input type="text" name="servicios" class="form-control" value="{{ old('servicios') }}">
+            <label for="servicios" class="form-label">Servicios</label>
+            <div class="form-check">
+                @foreach($servicios as $servicio)
+                    <input type="checkbox" name="servicios[]" value="{{ $servicio->id }}" class="form-check-input" id="servicio_{{ $servicio->id }}">
+                    <label class="form-check-label" for="servicio_{{ $servicio->id }}">{{ $servicio->nombre }}</label><br>
+                @endforeach
+            </div>
             @error('servicios')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -60,41 +65,6 @@
             <label for="politicas_cancelacion" class="form-label">Políticas de Cancelación</label>
             <textarea name="politicas_cancelacion" class="form-control" rows="4">{{ old('politicas_cancelacion') }}</textarea>
             @error('politicas_cancelacion')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="numero_estrellas" class="form-label">Número de Estrellas</label>
-            <input type="number" name="numero_estrellas" class="form-control" value="{{ old('numero_estrellas') }}" min="1" max="5" required>
-            @error('numero_estrellas')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="check_in" class="form-label">Fecha de Check-In</label>
-            <input type="date" name="check_in" class="form-control" value="{{ old('check_in') }}" required>
-            @error('check_in')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="check_out" class="form-label">Fecha de Check-Out</label>
-            <input type="date" name="check_out" class="form-control" value="{{ old('check_out') }}" required>
-            @error('check_out')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="numero_habitaciones" class="form-label">Número de Habitaciones</label>
-            <input type="number" name="numero_habitaciones" class="form-control" value="{{ old('numero_habitaciones') }}" min="1" required>
-            @error('numero_habitaciones')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="mb-3">
-            <label for="numero_huespedes" class="form-label">Número de Huéspedes</label>
-            <input type="number" name="numero_huespedes" class="form-control" value="{{ old('numero_huespedes') }}" min="1" required>
-            @error('numero_huespedes')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>

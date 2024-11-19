@@ -8,7 +8,7 @@ class VueloRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Esto permite que la solicitud sea autorizada
+        return true; 
     }
 
     public function rules()
@@ -21,10 +21,11 @@ class VueloRequest extends FormRequest
             'fecha_salida' => 'required|date',
             'fecha_llegada' => 'required|date|after:fecha_salida',
             'precio' => 'required|numeric|min:0',
-            'disponibilidad' => 'required|integer|min:1',
+            'disponibilidad_asientos' => 'required|integer|min:1', 
             'clase' => 'required|in:economica,ejecutiva,primera',
             'escalas' => 'required|boolean',
             'politica_cancelacion' => 'nullable|string',
         ];
     }
+    
 }

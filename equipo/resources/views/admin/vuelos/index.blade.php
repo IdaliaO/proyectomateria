@@ -1,19 +1,23 @@
 @extends('layouts.admin')
 
-@section('titulo', 'Gestionar Vuelos')
-
 @section('contenido')
-<div class="container my-4">
-    <h2 class="mb-4">Vuelos Disponibles</h2>
-    <a href="{{ route('admin.vuelo.crear') }}" class="btn btn-success mb-3">Agregar Vuelo</a>
-    <table class="table table-bordered">
+<div class="container mt-4">
+    <h1 class="mb-4">Lista de Vuelos</h1>
+    
+    <!-- Botón para agregar un nuevo vuelo -->
+    <div class="mb-4">
+        <a href="{{ route('admin.vuelos.crear') }}" class="btn btn-success">Agregar Nuevo Vuelo</a>
+    </div>
+
+    <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Aerolínea</th>
                 <th>Número de Vuelo</th>
                 <th>Origen</th>
                 <th>Destino</th>
+                <th>Fecha de Salida</th>
+                <th>Fecha de Llegada</th>
                 <th>Precio</th>
                 <th>Acciones</th>
             </tr>
@@ -21,18 +25,21 @@
         <tbody>
             @foreach($vuelos as $vuelo)
                 <tr>
-                    <td>{{ $vuelo->id }}</td>
                     <td>{{ $vuelo->aerolinea }}</td>
                     <td>{{ $vuelo->numero_vuelo }}</td>
                     <td>{{ $vuelo->origen }}</td>
                     <td>{{ $vuelo->destino }}</td>
+                    <td>{{ $vuelo->fecha_salida }}</td>
+                    <td>{{ $vuelo->fecha_llegada }}</td>
                     <td>{{ $vuelo->precio }}</td>
                     <td>
-                        <form action="{{ route('admin.vuelo.destroy', $vuelo->id) }}" method="POST" onsubmit="return confirm('¿Está seguro de eliminar este vuelo?');">
+                        <!-- Formulario para eliminar vuelo -->
+                        <form action="{{ route('admin.vuelos.destroy', $vuelo->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
+                        <a href="{{ route('admin.vuelos.edit', $vuelo->id) }}" class="btn btn-primary btn-sm">Editar</a>
                     </td>
                 </tr>
             @endforeach
