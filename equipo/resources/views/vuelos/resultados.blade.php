@@ -17,10 +17,10 @@
                             <input type="radio" name="escalas" value="" {{ request('escalas') === null ? 'checked' : '' }}> Cualquiera
                         </div>
                         <div>
-                            <input type="radio" name="escalas" value="0" {{ request('escalas') == '0' ? 'checked' : '' }}> Solo vuelos directos
+                            <input type="radio" name="escalas" value="0" {{ request('escalas') == '0' ? 'checked' : '' }}> Sin escalas
                         </div>
                         <div>
-                            <input type="radio" name="escalas" value="1" {{ request('escalas') == '1' ? 'checked' : '' }}> 1 Escala máximo
+                            <input type="radio" name="escalas" value="1" {{ request('escalas') == '1' ? 'checked' : '' }}> Con escalas
                         </div>
                     </div>
                     <div class="mb-3">
@@ -71,7 +71,7 @@
                                 <td>{{ $vuelo->horario }}</td>
                                 <td>{{ $vuelo->duracion }}</td>
                                 <td>${{ $vuelo->precio }}</td>
-                                <td>{{ $vuelo->escalas }}</td>
+                                <td>{{ $vuelo->escalas == '0' ? 'Sin escalas' : 'Con escalas' }}</td>
                                 <td>
                                     <button class="btn btn-success">Agregar al Carrito</button>
                                 </td>
