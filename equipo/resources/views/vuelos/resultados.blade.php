@@ -1,4 +1,3 @@
-<!-- resources/views/vuelos/resultados.blade.php -->
 @extends('layouts.app')
 
 @section('titulo', 'Resultados de Vuelos')
@@ -6,7 +5,7 @@
 @section('contenido')
 <div class="container my-4">
     <div class="row">
-        <!-- Filtros -->
+       
         <div class="col-md-3">
             <div class="card p-3">
                 <h4>Filtros</h4>
@@ -44,8 +43,6 @@
                 </form>
             </div>
         </div>
-
-        <!-- Resultados -->
         <div class="col-md-9">
             <h2>Resultados de Búsqueda de Vuelos</h2>
             @if($resultados->isEmpty())

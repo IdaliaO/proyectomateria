@@ -9,35 +9,35 @@
         @csrf
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre del Hotel</label>
-            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" required>
+            <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}">
             @error('nombre')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="ubicacion" class="form-label">Ubicación</label>
-            <input type="text" name="ubicacion" class="form-control" value="{{ old('ubicacion') }}" required>
+            <input type="text" name="ubicacion" class="form-control" value="{{ old('ubicacion') }}">
             @error('ubicacion')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="categoria" class="form-label">Categoría (Estrellas)</label>
-            <input type="number" name="categoria" class="form-control" value="{{ old('categoria') }}" min="1" max="5" required>
+            <input type="number" name="categoria" class="form-control" value="{{ old('categoria') }}" min="1" max="5">
             @error('categoria')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="precio_noche" class="form-label">Precio por Noche</label>
-            <input type="number" name="precio_noche" class="form-control" value="{{ old('precio_noche') }}" step="0.01" required>
+            <input type="number" name="precio_noche" class="form-control" value="{{ old('precio_noche') }}" step="0.01">
             @error('precio_noche')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="disponibilidad" class="form-label">Disponibilidad de Habitaciones</label>
-            <input type="number" name="disponibilidad" class="form-control" value="{{ old('disponibilidad') }}" min="1" required>
+            <input type="number" name="disponibilidad" class="form-control" value="{{ old('disponibilidad') }}" min="1">
             @error('disponibilidad')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -70,7 +70,7 @@
         </div>
         <div class="mb-3">
             <label for="fotografia" class="form-label">Fotografía del Hotel</label>
-            <input type="file" name="fotografia" class="form-control" accept="images/*" required>
+            <input type="file" name="fotografia" class="form-control" accept="images/*" >
             @error('fotografia')
                 <div class="text-danger">{{ $message }}</div>
             @enderror

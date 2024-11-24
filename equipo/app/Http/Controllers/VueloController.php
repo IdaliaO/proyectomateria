@@ -10,16 +10,14 @@ class VueloController extends Controller
 {
     public function buscarVuelos()
     {
-        // Retornar la vista para buscar vuelos
+  
         return view('vuelos.buscar');
     }
 
     public function resultadosVuelos(BuscarVueloRequest $request)
     {
-        // Iniciar la consulta de vuelos
         $query = DB::table('vuelos');
 
-        // Aplicar los filtros basados en los valores del request
         if ($request->filled('origen')) {
             $query->where('origen', 'like', '%' . $request->origen . '%');
         }
@@ -56,10 +54,8 @@ class VueloController extends Controller
             $query->where('escalas', $request->escalas);
         }
 
-        // Obtener los resultados de la búsqueda
         $resultados = $query->get();
 
-        // Retornar la vista de resultados con los datos obtenidos
         return view('vuelos.resultados', compact('resultados'));
     }
 }

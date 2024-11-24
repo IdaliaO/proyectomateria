@@ -10,8 +10,13 @@ use App\Http\Requests\HotelRequest;
 class HotelController extends Controller
 {
    
+    public function buscarHoteles()
+    {
+  
+        return view('hoteles.buscar');
+    }
 
-    public function buscarHoteles(HotelRequest $request)
+    public function resultadosHoteles(HotelRequest $request)
     {
         $query = DB::table('hoteles');
         if ($request->filled('destino')) {

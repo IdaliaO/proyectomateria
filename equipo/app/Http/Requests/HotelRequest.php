@@ -19,10 +19,10 @@ class HotelRequest extends FormRequest
             'categoria' => 'required|integer|min:1|max:5',
             'precio_noche' => 'required|numeric|min:0',
             'disponibilidad' => 'required|integer|min:1',
-            'descripcion' => 'nullable|string',
-            'politicas_cancelacion' => 'nullable|string',
+            'descripcion' => 'required|string',
+            'politicas_cancelacion' => 'required|string',
             'fotografia' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'servicios' => 'nullable|array',
+            'servicios' => 'required|array',
             'servicios.*' => 'exists:servicios,id', 
         ];
     }
@@ -35,8 +35,11 @@ class HotelRequest extends FormRequest
             'categoria.required' => 'La categoría (estrellas) es obligatoria.',
             'precio_noche.required' => 'El precio por noche es obligatorio.',
             'disponibilidad.required' => 'La disponibilidad de habitaciones es obligatoria.',
+            'descripcion.required' => 'La descripcion del Hotel es requerida',
+            'politicas_cancelacion' =>'Las politicas de cancelacion son obligatorias',
             'fotografia.required' => 'La fotografía del hotel es obligatoria.',
             'fotografia.image' => 'La fotografía debe ser una imagen válida.',
+            'servicios' => 'Elige los servicios que ofrece el hotel',
             'servicios.exists' => 'Uno o más servicios seleccionados no son válidos.',
         ];
     }

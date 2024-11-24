@@ -36,6 +36,11 @@
                             <a class="nav-link" href="{{ route('admin.registro') }}">Registrar Administrador</a>
                         </li>
                         <li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.usuario.crear') }}">Registrar Usuario</a>
+</li>
+
+                        
+                        <li class="nav-item">
                             <form action="{{ route('admin.logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="nav-link btn btn-link text-white">Cerrar Sesión</button>
