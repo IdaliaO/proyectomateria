@@ -6,7 +6,6 @@ use App\Http\Requests\VueloRequest;
 use App\Http\Requests\HotelRequest;
 use App\Http\Requests\RegistroAdministradorRequest;
 use App\Http\Requests\RegistroUsuarioRequest;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -125,10 +124,23 @@ public function eliminarUsuario($id)
 
 
 //GESTION ADMINISTRADORES
+public function listarAdministradores()
+{
+    $this->verificarAutenticacion();
 
+    $administradores = DB::table('administradores')->get();
 
+    return view('admin.administradores.index', compact('administradores'));
+}
 
+public function eliminarAdministrador($id)
+{
+    $this->verificarAutenticacion();
 
+    DB::table('administradores')->where('id', $id)->delete();
+
+    return redirect()->route('admin.administradores.index')->with('success', 'Administrador eliminado correctamente.');
+}
 
 
 public function registrar(RegistroAdministradorRequest $request)
@@ -230,11 +242,9 @@ public function registrar(RegistroAdministradorRequest $request)
 
     public function crearHotel(HotelRequest $request)
     {
-        $this->verificarAutenticacion();
-    
         try {
-            $fotografiaPath = $request->hasFile('fotografia') 
-                ? $request->file('fotografia')->store('images', 'public') 
+            $fotografiaPath = $request->hasFile('fotografia') && $request->file('fotografia')->isValid()
+                ? $request->file('fotografia')->store('images', 'public')
                 : null;
     
             DB::table('hoteles')->insert($request->validated() + [
@@ -250,45 +260,103 @@ public function registrar(RegistroAdministradorRequest $request)
         }
     }
     
-
     public function editarHotelFormulario($id)
-    {
-        $this->verificarAutenticacion();
-        $hotel = DB::table('hoteles')->find($id);
-
-        if (!$hotel) {
-            return redirect()->route('admin.hoteles.index')->with('error', 'Hotel no encontrado.');
-        }
-
-        $servicios = DB::table('servicios')->get();
-        $hotelServicios = DB::table('hotel_servicio')->where('hotel_id', $id)->pluck('servicio_id')->toArray();
-
-        return view('admin.hoteles.editar', compact('hotel', 'servicios', 'hotelServicios'));
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a esta página.');
     }
 
-    public function actualizarHotel(HotelRequest $request, $id)
-    {
-        $this->verificarAutenticacion();
-    
-        try {
-            $datosActualizados = $request->validated();
-    
-            if ($request->hasFile('fotografia')) {
-                $datosActualizados['fotografia'] = $request->file('fotografia')->store('images', 'public');
+    $hotel = DB::table('hoteles')->where('id', $id)->first();
+    if (!$hotel) {
+        return redirect()->route('admin.hoteles.index')->with('error', 'Hotel no encontrado.');
+    }
+
+    $servicios = DB::table('servicios')->get();
+
+    $hotelServicios = DB::table('hotel_servicio')->where('hotel_id', $id)->pluck('servicio_id')->toArray();
+
+    return view('admin.hoteles.editar', compact('hotel', 'servicios', 'hotelServicios'));
+}
+
+public function actualizarHotel(HotelRequest $request, $id)
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para realizar esta acción.');
+    }
+
+    try {
+        // Actualizar los datos básicos del hotel
+        DB::table('hoteles')->where('id', $id)->update([
+            'nombre' => $request->nombre,
+            'ubicacion' => $request->ubicacion,
+            'categoria' => $request->categoria,
+            'precio_noche' => $request->precio_noche,
+            'disponibilidad' => $request->disponibilidad,
+            'descripcion' => $request->descripcion,
+            'politicas_cancelacion' => $request->politicas_cancelacion,
+            'updated_at' => now(),
+        ]);
+
+        if ($request->hasFile('fotografia')) {
+            // Obtener datos del hotel para manejar la fotografía anterior
+            $hotel = DB::table('hoteles')->where('id', $id)->first();
+
+            // Eliminar la fotografía anterior si existe
+            if ($hotel->fotografia && file_exists(public_path($hotel->fotografia))) {
+                unlink(public_path($hotel->fotografia));
             }
-    
-            $datosActualizados['updated_at'] = now();
-    
-            DB::table('hoteles')->where('id', $id)->update($datosActualizados);
-    
-            return redirect()->route('admin.hoteles.index')->with('success', 'Hotel actualizado correctamente.');
-        } catch (\Exception $e) {
-            \Log::error('Error al actualizar el hotel: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Hubo un problema al actualizar el hotel. Por favor, inténtelo de nuevo.');
+
+            // Subir la nueva fotografía
+            $file = $request->file('fotografia');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+            $fotografiaPath = 'images/' . $filename;
+
+            DB::table('hoteles')->where('id', $id)->update(['fotografia' => $fotografiaPath]);
         }
+
+        // Actualizar servicios
+        DB::table('hotel_servicio')->where('hotel_id', $id)->delete();
+
+        if ($request->has('servicios')) {
+            foreach ($request->servicios as $servicioId) {
+                DB::table('hotel_servicio')->insert([
+                    'hotel_id' => $id,
+                    'servicio_id' => $servicioId,
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel actualizado correctamente.');
+    } catch (\Exception $e) {
+        \Log::error('Error al actualizar el hotel: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Hubo un problema al actualizar el hotel. Por favor, inténtelo de nuevo.');
+    }
+}
+
+public function verDetallesHotel($id)
+{
+    if (!Session::has('admin_autenticado')) {
+        return redirect()->route('admin.login')->with('error', 'Debe iniciar sesión para acceder a esta página.');
     }
 
-    
+    // Buscar el hotel por ID
+    $hotel = DB::table('hoteles')->where('id', $id)->first();
+
+    if (!$hotel) {
+        return redirect()->route('admin.hoteles.index')->with('error', 'Hotel no encontrado.');
+    }
+
+    // Obtener los servicios del hotel
+    $servicios = DB::table('hotel_servicio')
+        ->join('servicios', 'hotel_servicio.servicio_id', '=', 'servicios.id')
+        ->where('hotel_servicio.hotel_id', $id)
+        ->select('servicios.nombre')
+        ->get();
+
+    return view('admin.hoteles.detalles', compact('hotel', 'servicios'));
+}
+
 
 
 

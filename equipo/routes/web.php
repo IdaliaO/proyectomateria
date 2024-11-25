@@ -8,28 +8,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [UsuarioController::class, 'inicio'])->name('inicio');
 
-// Rutas de registro y login de usuarios(funcionan completamente con db)
+// Rutas de registro y login de usuarios(funcionan completamente con db)NO MODIFICAR
 Route::get('/registro', [UsuarioController::class, 'mostrarRegistro'])->name('registro.mostrar');
 Route::post('/registro/enviar', [UsuarioController::class, 'registrar'])->name('registro.enviar');
 Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login.mostrar');
 Route::post('/login', [UsuarioController::class, 'autenticar'])->name('login.enviar');
 Route::post('/logout', [UsuarioController::class, 'logout'])->name('logout');
 
-//NECESITAN REVISAR BIEN 
-// Rutas de búsqueda de vuelos y hoteles
-Route::get('/resultados/vuelos', [VueloController::class, 'buscar'])->name('resultados.vuelos');
-Route::get('/resultados/hoteles', [HotelController::class, 'buscar'])->name('hoteles.resultados');
-// Rutas de vuelos y hoteles
-Route::get('/buscar-vuelos', [VueloController::class, 'buscarVuelos'])->name('buscar.vuelos');
-Route::get('/resultados-vuelos', [VueloController::class, 'resultadosVuelos'])->name('resultados.vuelos');
+// Rutas para hoteles X REVISAR 
 Route::get('/hoteles/buscar', [HotelController::class, 'buscarHoteles'])->name('hoteles.buscar');
 Route::get('/hoteles/resultados', [HotelController::class, 'resultadosHoteles'])->name('hoteles.resultados');
 Route::get('/hoteles/detalle/{id}', [HotelController::class, 'mostrarDetalle'])->name('hoteles.detalle');
+// Rutas para vuelos
+Route::get('/buscar-vuelos', [VueloController::class, 'buscarVuelos'])->name('buscar.vuelos');
+Route::get('/resultados-vuelos', [VueloController::class, 'resultadosVuelos'])->name('resultados.vuelos');
 
 
 
-
-// Rutas de administración funcionan con bd 
+// Rutas de administración funcionan con bd NO MODIFICAR
 Route::prefix('admin')->group(function () {
 
     // Dashboard
@@ -41,12 +37,13 @@ Route::prefix('admin')->group(function () {
     // Registro de administradores
     Route::get('/registro', [AdministradorController::class, 'mostrarRegistro'])->name('admin.registro');
     Route::post('/registro/enviar', [AdministradorController::class, 'registrar'])->name('admin.registro.enviar');
+    Route::get('/administradores', [AdministradorController::class, 'listarAdministradores'])->name('admin.administradores.index');
+    Route::delete('/administradores/{id}', [AdministradorController::class, 'eliminarAdministrador'])->name('admin.administradores.destroy');
     // Gestión de usuarios
     Route::get('usuarios', [AdministradorController::class, 'listarUsuarios'])->name('admin.usuarios.index');
     Route::get('usuarios/registro', [AdministradorController::class, 'crearUsuarioFormulario'])->name('admin.usuario.crear');
     Route::post('usuarios/enviar', [AdministradorController::class, 'crearUsuario'])->name('admin.usuario.store');
     Route::delete('/{id}', [AdministradorController::class, 'eliminarUsuario'])->name('admin.usuario.destroy');
-    
     // Gestión de vuelos
     Route::prefix('vuelos')->group(function () {
         Route::get('/', [AdministradorController::class, 'listarVuelos'])->name('admin.vuelos.index');
@@ -74,7 +71,7 @@ Route::prefix('admin')->group(function () {
 
 
 
-// Rutas para gestionar reservaciones
+// Rutas para gestionar reservaciones X REVISAR
 Route::get('reservaciones', [AdministradorController::class, 'listarReservaciones'])->name('admin.reservaciones.index');
 Route::delete('reservacion/{id}', [AdministradorController::class, 'eliminarReservacion'])->name('admin.reservacion.destroy');
 

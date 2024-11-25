@@ -57,9 +57,9 @@
             @enderror
         </div>
         <div class="mb-3">
-            <label for="disponibilidad_asientos" class="form-label">Disponibilidad de Asientos</label>
-            <input type="number" class="form-control" name="disponibilidad_asientos" value="{{ old('disponibilidad_asientos', $vuelo->disponibilidad) }}">
-            @error('disponibilidad_asientos')
+            <label for="disponibilidad" class="form-label">Disponibilidad de Asientos</label>
+            <input type="number" class="form-control" name="disponibilidad" value="{{ old('disponibilidad', $vuelo->disponibilidad) }}">
+            @error('disponibilidad')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
