@@ -1,21 +1,17 @@
 @extends('layouts.admin')
-
 @section('contenido')
 <div class="container my-5">
-    <!-- Título Principal -->
     <div class="text-center mb-5">
         <h1 class="display-4 text-danger"><i class="fas fa-plane"></i> Lista de Vuelos</h1>
         <p class="text-muted">Consulta y administra todos los vuelos disponibles.</p>
     </div>
 
-    <!-- Botón para agregar un nuevo vuelo -->
     <div class="mb-4 text-end">
         <a href="{{ route('admin.vuelos.crear') }}" class="btn btn-danger btn-lg">
             <i class="fas fa-plus-circle"></i> Agregar Nuevo Vuelo
         </a>
     </div>
 
-    <!-- Tabla de Vuelos -->
     <div class="card shadow-lg border-0">
         <div class="card-body p-4">
             <table class="table table-hover table-bordered">
@@ -42,17 +38,16 @@
                             <td><i class="fas fa-clock text-secondary"></i> {{ $vuelo->fecha_llegada }}</td>
                             <td><i class="fas fa-dollar-sign text-success"></i> ${{ number_format($vuelo->precio, 2) }}</td>
                             <td>
-                                <!-- Botones de acciones -->
                                 <div class="d-flex justify-content-center">
                                     <a href="{{ route('admin.vuelos.edit', $vuelo->id) }}" class="btn btn-primary btn-sm me-2">
                                         <i class="fas fa-edit"></i> Editar
                                     </a>
-                                    <form action="{{ route('admin.vuelos.destroy', $vuelo->id) }}" method="POST" style="display:inline;">
+                                    <button type="button" class="btn btn-danger btn-sm delete-button" data-id="{{ $vuelo->id }}">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                    <form id="delete-form-{{ $vuelo->id }}" action="{{ route('admin.vuelos.destroy', $vuelo->id) }}" method="POST" style="display:none;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash"></i> Eliminar
-                                        </button>
                                     </form>
                                 </div>
                             </td>
@@ -63,4 +58,29 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-button');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const flightId = this.getAttribute('data-id'); 
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción no se puede deshacer.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: '<i class="fas fa-check-circle"></i> Sí, eliminar',
+                    cancelButtonText: '<i class="fas fa-ban"></i> Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById(`delete-form-${flightId}`).submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

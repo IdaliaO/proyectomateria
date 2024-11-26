@@ -6,7 +6,7 @@
         @csrf
         <div class="form-group">
             <label for="email">Correo Electrónico</label>
-            <input type="email" name="email" class="form-control" required>
+            <input type="email" name="email" class="form-control" >
         </div>
         <button type="submit" class="btn btn-primary mt-3">Enviar Enlace de Recuperación</button>
     </form>

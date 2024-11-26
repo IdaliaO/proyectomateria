@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('titulo', 'Resultados de Vuelos')
-
 @section('contenido')
 <div class="container my-4">
     <div class="row">

@@ -3,59 +3,52 @@
 @section('contenido')
 <div class="container my-4">
     <h2 class="mb-4">Resultados de Búsqueda</h2>
-
     <div class="row">
         <div class="col-md-3">
             <div class="border p-3 mb-4">
-            <form method="GET" action="{{ route('hoteles.resultados') }}">
-
-                    
+            <form method="GET" action="{{ route('hoteles.resultados') }}">            
                     <h5>Filtrar por:</h5>
                     <hr>
                     <h6>Tu presupuesto (por noche)</h6>
                     <input type="number" class="form-control mb-3" name="precio_minimo" placeholder="Precio mínimo" value="{{ request('precio_minimo') }}">
                     <input type="number" class="form-control mb-3" name="precio_maximo" placeholder="Precio máximo" value="{{ request('precio_maximo') }}">
-
                     <h6 class="mt-4">Categoría (Estrellas)</h6>
                     <div class="mb-3">
                         @for ($i = 1; $i <= 5; $i++)
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="categoria" value="{{ $i }}" id="estrella_{{ $i }}" {{ request('categoria') == $i ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="categoria" value="{{ $i }}" id="estrella_{{ $i }}" {{ ('categoria') == $i ? 'checked' : '' }}>
                                 <label class="form-check-label" for="estrella_{{ $i }}">
                                     {{ $i }} Estrella{{ $i > 1 ? 's' : '' }}
                                 </label>
                             </div>
                         @endfor
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="categoria" value="" id="categoria_todas" {{ is_null(request('categoria')) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="radio" name="categoria" value="" id="categoria_todas" {{ is_null(('categoria')) ? 'checked' : '' }}>
                             <label class="form-check-label" for="categoria_todas">Todas las categorías</label>
                         </div>
                     </div>
-
                     <h6>Distancia al centro (km)</h6>
-                    <input type="number" class="form-control mb-3" name="distancia_maxima" placeholder="Máxima distancia" value="{{ request('distancia_maxima') }}">
+                    <input type="number" class="form-control mb-3" name="distancia_maxima" placeholder="Máxima distancia" value="{{ ('distancia_maxima') }}">
 
                     <h6 class="mt-4">Servicios</h6>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="servicios[]" value="wifi" id="servicio_wifi" {{ in_array('wifi', request('servicios', [])) ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" name="servicios[]" value="wifi" id="servicio_wifi" {{ in_array('wifi', ('servicios', [])) ? 'checked' : '' }}>
                         <label class="form-check-label" for="servicio_wifi">WiFi</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="servicios[]" value="piscina" id="servicio_piscina" {{ in_array('piscina', request('servicios', [])) ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" name="servicios[]" value="piscina" id="servicio_piscina" {{ in_array('piscina', ('servicios', [])) ? 'checked' : '' }}>
                         <label class="form-check-label" for="servicio_piscina">Piscina</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="servicios[]" value="desayuno" id="servicio_desayuno" {{ in_array('desayuno', request('servicios', [])) ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" name="servicios[]" value="desayuno" id="servicio_desayuno" {{ in_array('desayuno', ('servicios', [])) ? 'checked' : '' }}>
                         <label class="form-check-label" for="servicio_desayuno">Desayuno incluido</label>
                     </div>
-
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
                     </div>
                 </form>
             </div>
         </div>
-
         <div class="col-md-9">
             @if($resultados->isEmpty())
                 <p>No se encontraron hoteles que coincidan con los criterios de búsqueda.</p>
@@ -64,7 +57,6 @@
                     <div class="card mb-4">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <!-- Imagen del hotel -->
                                 <img src="{{ asset('imagenes/hoteles/' . $hotel->id . '_1.jpg') }}" class="img-fluid rounded-start" alt="{{ $hotel->nombre }}">
                             </div>
                             <div class="col-md-8">

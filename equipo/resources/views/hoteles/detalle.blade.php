@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('titulo', $hotel->nombre)
-
 @section('contenido')
 <div class="container my-4">
     <div class="row">
@@ -12,7 +10,6 @@
                     <div class="carousel-item active">
                         <img src="{{ asset('imagenes/hoteles/' . $hotel->id . '_1.jpg') }}" class="d-block w-100" alt="{{ $hotel->nombre }}">
                     </div>
-                    <!-- Agregar más imágenes si es necesario -->
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('titulo', 'Buscar Hoteles')
-
 @section('contenido')
 <div class="container my-4">
     <h2 class="mb-4">Buscar Hoteles</h2>
@@ -63,7 +61,6 @@
                     <option value="wifi">WiFi</option>
                     <option value="piscina">Piscina</option>
                     <option value="desayuno">Desayuno incluido</option>
-                    <!-- Agrega más opciones si es necesario -->
                 </select>
                 @error('servicios')
                     <div class="text-danger">{{ $message }}</div>
@@ -74,9 +71,7 @@
             </div>
         </div>
     </form>
-    
-    <!-- Lista de Resultados -->
-    @if(isset($resultados))
+        @if(isset($resultados))
         <div class="col-md-9 mt-5">
             @if($resultados->isEmpty())
                 <p>No se encontraron hoteles que coincidan con los criterios de búsqueda.</p>
@@ -85,7 +80,6 @@
                     <div class="card mb-4">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <!-- Imagen del hotel -->
                                 <img src="{{ asset('imagenes/hoteles/' . $hotel->id . '_1.jpg') }}" class="img-fluid rounded-start" alt="{{ $hotel->nombre }}">
                             </div>
                             <div class="col-md-8">

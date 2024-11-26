@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('titulo', 'Registro de Usuario')
-
 @section('contenido')
 <div class="container my-4">
     <h2 class="mb-4">Registro de Usuario</h2>
