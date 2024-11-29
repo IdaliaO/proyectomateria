@@ -301,6 +301,8 @@ public function actualizarHotel(HotelRequest $request, $id)
 
     try {
         $hotel = DB::table('hoteles')->where('id', $id)->first();
+        
+        // Actualizar los datos del hotel
         DB::table('hoteles')->where('id', $id)->update([
             'nombre' => $request->nombre,
             'ubicacion' => $request->ubicacion,
@@ -311,6 +313,7 @@ public function actualizarHotel(HotelRequest $request, $id)
             'politicas_cancelacion' => $request->politicas_cancelacion,
             'updated_at' => now(),
         ]);
+
         if ($request->hasFile('fotografia') && $request->file('fotografia')->isValid()) {
             if ($hotel->fotografia && file_exists(public_path($hotel->fotografia))) {
                 unlink(public_path($hotel->fotografia));
@@ -323,6 +326,7 @@ public function actualizarHotel(HotelRequest $request, $id)
 
             DB::table('hoteles')->where('id', $id)->update(['fotografia' => $fotografiaPath]);
         }
+
         DB::table('hotel_servicio')->where('hotel_id', $id)->delete();
         if ($request->has('servicios') && is_array($request->servicios)) {
             $servicios = array_map(function ($servicioId) use ($id) {
@@ -335,12 +339,14 @@ public function actualizarHotel(HotelRequest $request, $id)
             DB::table('hotel_servicio')->insert($servicios);
         }
 
-        return response()->json(['success' => 'Hotel actualizado correctamente.']);
+        return redirect()->route('admin.hoteles.index')->with('success', 'Hotel actualizado correctamente.');
     } catch (\Exception $e) {
         \Log::error('Error al actualizar el hotel: ' . $e->getMessage());
-        return response()->json(['error' => 'Hubo un problema al actualizar el hotel. Por favor, inténtelo de nuevo.'], 500);
+        return redirect()->route('admin.hoteles.index')->with('error', 'Hubo un problema al actualizar el hotel. Por favor, inténtelo de nuevo.');
     }
 }
+
+
 public function editarHotelFormulario($id)
 {
     $this->verificarAutenticacion(); 

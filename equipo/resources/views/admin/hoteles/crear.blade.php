@@ -6,7 +6,7 @@
         <h1 class="display-4 text-danger"><i class="fas fa-plus-circle"></i> Agregar Nuevo Hotel</h1>
         <p class="text-muted">Completa los detalles necesarios para registrar un nuevo hotel en el sistema.</p>
     </div>
-    <form method="POST" action="{{ route('admin.hotel.store') }}" enctype="multipart/form-data" class="shadow-lg p-4 bg-white rounded">
+    <form id="crear-hotel-form" method="POST" action="{{ route('admin.hotel.store') }}" enctype="multipart/form-data" class="shadow-lg p-4 bg-white rounded">
         @csrf
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-info-circle"></i> Información Básica</h3>
@@ -91,10 +91,46 @@
             </div>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-danger btn-lg px-5">
+            <button type="button" id="btn-crear-hotel" class="btn btn-danger btn-lg px-5">
                 <i class="fas fa-save"></i> Guardar Hotel
             </button>
         </div>
     </form>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $('#btn-crear-hotel').on('click', function (e) {
+        e.preventDefault();
+
+        var formData = new FormData($('#crear-hotel-form')[0]);
+        $.ajax({
+            url: $('#crear-hotel-form').attr('action'),
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: 'Hotel creado correctamente.',
+                    confirmButtonColor: '#d33'
+                }).then(() => {
+                    window.location.href = "{{ route('admin.hoteles.index') }}";
+                });
+            },
+            error: function (xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al crear el hotel. Por favor, inténtelo de nuevo.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
+    });
+</script>
 @endsection
+

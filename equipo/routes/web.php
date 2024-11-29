@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [UsuarioController::class, 'inicio'])->name('inicio');
 
-// Rutas de registro y login de usuarios(funcionan completamente con db)NO MODIFICAR
+// Rutas de registro y login de usuarios(funcionan completamente con db)FALTA IMPLEMENTAR LO DE LA CONFIRMACION
 Route::get('/registro', [UsuarioController::class, 'mostrarRegistro'])->name('registro.mostrar');
 Route::post('/registro/enviar', [UsuarioController::class, 'registrar'])->name('registro.enviar');
+
+
+
+//NO MODIFICAR solo es login
 Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login.mostrar');
 Route::post('/login', [UsuarioController::class, 'autenticar'])->name('login.enviar');
 Route::post('/logout', [UsuarioController::class, 'logout'])->name('logout');
@@ -51,7 +55,7 @@ Route::get('/{id}/editar', [AdministradorController::class, 'editarVueloFormular
 Route::put('/{id}', [AdministradorController::class, 'actualizarVuelo'])->name('admin.vuelos.update');
 Route::delete('/{id}', [AdministradorController::class, 'eliminarVuelo'])->name('admin.vuelos.destroy');
 });
-// Gestión de hoteles
+// Gestión de hoteles NO MODIFICAR
 Route::prefix('hoteles')->group(function () {
 Route::get('/', [AdministradorController::class, 'listarHoteles'])->name('admin.hoteles.index');
 Route::get('/crear', [AdministradorController::class, 'crearHotelFormulario'])->name('admin.hotel.crear');

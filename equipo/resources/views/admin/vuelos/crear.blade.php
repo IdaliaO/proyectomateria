@@ -6,7 +6,7 @@
         <p class="text-muted">Registra un nuevo vuelo proporcionando la información necesaria.</p>
     </div>
 
-    <form method="POST" action="{{ route('admin.vuelos.store') }}" class="shadow-lg p-4 bg-white rounded">
+    <form id="crear-vuelo-form" method="POST" action="{{ route('admin.vuelos.store') }}" class="shadow-lg p-4 bg-white rounded">
         @csrf
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-info-circle"></i> Información del Vuelo</h3>
@@ -111,10 +111,47 @@
             </div>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-danger btn-lg px-5">
+            <button type="button" id="btn-crear-vuelo" class="btn btn-danger btn-lg px-5">
                 <i class="fas fa-save"></i> Crear Vuelo
             </button>
         </div>
     </form>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $('#btn-crear-vuelo').on('click', function (e) {
+        e.preventDefault();
+
+        var formData = new FormData($('#crear-vuelo-form')[0]);
+        $.ajax({
+            url: $('#crear-vuelo-form').attr('action'),
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: 'Vuelo creado correctamente.',
+                    confirmButtonColor: '#d33'
+                }).then(() => {
+                    // Redireccionar al índice de vuelos después del éxito
+                    window.location.href = "{{ route('admin.vuelos.index') }}";
+                });
+            },
+            error: function (xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al crear el vuelo. Por favor, inténtelo de nuevo.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
+    });
+</script>
 @endsection
+
