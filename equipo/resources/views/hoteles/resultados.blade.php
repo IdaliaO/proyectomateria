@@ -6,43 +6,38 @@
     <div class="row">
         <div class="col-md-3">
             <div class="border p-3 mb-4">
-            <form method="GET" action="{{ route('hoteles.resultados') }}">            
+                <form method="GET" action="{{ route('hoteles.resultados') }}">
                     <h5>Filtrar por:</h5>
                     <hr>
-                    <h6>Tu presupuesto (por noche)</h6>
-                    <input type="number" class="form-control mb-3" name="precio_minimo" placeholder="Precio mínimo" value="{{ request('precio_minimo') }}">
-                    <input type="number" class="form-control mb-3" name="precio_maximo" placeholder="Precio máximo" value="{{ request('precio_maximo') }}">
+                    <input type="hidden" name="destino" value="{{ request('destino') }}">
+
+                    <label for="precio_noche_max" class="form-label">Tu presupuesto (por noche)</label>
+                    <input type="number" class="form-control" name="precio_noche_max" placeholder="Precio máximo" value="{{ request('precio_noche_max') }}">
+
                     <h6 class="mt-4">Categoría (Estrellas)</h6>
                     <div class="mb-3">
                         @for ($i = 1; $i <= 5; $i++)
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="categoria" value="{{ $i }}" id="estrella_{{ $i }}" {{ ('categoria') == $i ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="categoria" value="{{ $i }}" id="estrella_{{ $i }}" {{ request('categoria') == $i ? 'checked' : '' }}>
                                 <label class="form-check-label" for="estrella_{{ $i }}">
                                     {{ $i }} Estrella{{ $i > 1 ? 's' : '' }}
                                 </label>
                             </div>
                         @endfor
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="categoria" value="" id="categoria_todas" {{ is_null(('categoria')) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="radio" name="categoria" value="" id="categoria_todas" {{ is_null(request('categoria')) ? 'checked' : '' }}>
                             <label class="form-check-label" for="categoria_todas">Todas las categorías</label>
                         </div>
                     </div>
-                    <h6>Distancia al centro (km)</h6>
-                    <input type="number" class="form-control mb-3" name="distancia_maxima" placeholder="Máxima distancia" value="{{ ('distancia_maxima') }}">
 
                     <h6 class="mt-4">Servicios</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="servicios[]" value="wifi" id="servicio_wifi" {{ in_array('wifi', ('servicios', [])) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="servicio_wifi">WiFi</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="servicios[]" value="piscina" id="servicio_piscina" {{ in_array('piscina', ('servicios', [])) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="servicio_piscina">Piscina</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="servicios[]" value="desayuno" id="servicio_desayuno" {{ in_array('desayuno', ('servicios', [])) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="servicio_desayuno">Desayuno incluido</label>
-                    </div>
+                    @foreach($servicios as $servicio)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="servicios[]" value="{{ $servicio->id }}" id="servicio_{{ $servicio->id }}" {{ in_array($servicio->id, request('servicios', [])) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="servicio_{{ $servicio->id }}">{{ $servicio->nombre }}</label>
+                        </div>
+                    @endforeach
+
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
                     </div>
@@ -57,23 +52,24 @@
                     <div class="card mb-4">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img src="{{ asset('imagenes/hoteles/' . $hotel->id . '_1.jpg') }}" class="img-fluid rounded-start" alt="{{ $hotel->nombre }}">
+                                <div style="
+                                    background-image: url('{{ $hotel->fotografia ? asset($hotel->fotografia) : asset('images/default-hotel.jpg') }}');
+                                    background-size: cover;
+                                    background-position: center;
+                                    height: 200px;
+                                    border-top-left-radius: 15px;
+                                    border-bottom-left-radius: 15px;">
+                                </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div>
-                                            <h5 class="card-title">{{ $hotel->nombre }}</h5>
-                                            <p class="text-muted">{{ $hotel->destino }} - <a href="#">Mostrar en el mapa</a> - a {{ $hotel->distancia_centro }} km del centro</p>
-                                            <p class="mb-1"><strong>Calificación: </strong>{{ $hotel->calificacion }} / 10 ({{ rand(20, 1500) }} comentarios)</p>
-                                            <p class="mb-1"><strong>Estrellas: </strong>{{ $hotel->numero_estrellas }} {{ $hotel->numero_estrellas > 1 ? 'Estrellas' : 'Estrella' }}</p>
-                                            <p class="mb-1"><strong>Habitación: </strong>{{ $hotel->capacidad }} huéspedes</p>
-                                            <p class="mb-2"><strong>Servicios: </strong>{{ implode(', ', $hotel->servicios ?? []) }}</p>
-                                            <p class="card-text">Precio por noche: <strong>COP {{ number_format($hotel->precio_por_noche, 2) }}</strong></p>
-                                        </div>
-                                        <div>
-                                            <a href="{{ route('hoteles.detalle', ['id' => $hotel->id]) }}" class="btn btn-primary">Ver disponibilidad</a>
-                                        </div>
+                                    <h5 class="card-title">{{ $hotel->nombre }}</h5>
+                                    <p><strong>Ubicación:</strong> {{ $hotel->ubicacion }}</p>
+                                    <p><strong>Estrellas:</strong> {{ $hotel->categoria }}</p>
+                                    <p><strong>Precio por noche:</strong> ${{ number_format($hotel->precio_noche, 2) }}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ route('hoteles.detalle', ['id' => $hotel->id]) }}" class="btn btn-primary">Detalles</a>
+                                        <button class="btn btn-success reservar-btn" data-hotel-id="{{ $hotel->id }}">Reservar</button>
                                     </div>
                                 </div>
                             </div>
@@ -84,4 +80,23 @@
         </div>
     </div>
 </div>
+<script>
+    document.querySelectorAll('.reservar-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const hotelId = this.getAttribute('data-hotel-id');
+            @if(auth()->check())
+                window.location.href = `/reservacion/${hotelId}`;
+            @else
+                Swal.fire({
+                    title: 'Inicia Sesión',
+                    text: 'Debes iniciar sesión para reservar.',
+                    icon: 'warning',
+                    confirmButtonText: 'Ok'
+                });
+            @endif
+        });
+    });
+</script>
+
+
 @endsection

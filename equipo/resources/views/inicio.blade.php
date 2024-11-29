@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('titulo', 'Inicio | Los Cardenales')
-
 @section('contenido')
 <div class="container my-4">
   

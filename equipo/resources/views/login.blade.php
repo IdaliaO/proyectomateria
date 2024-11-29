@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('titulo', 'Iniciar Sesión')
-
 @section('contenido')
 <div class="container my-4">
     <h2 class="mb-4">Iniciar Sesión</h2>

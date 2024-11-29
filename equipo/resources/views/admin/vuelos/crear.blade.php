@@ -1,5 +1,4 @@
 @extends('layouts.admin')
-
 @section('contenido')
 <div class="container my-5">
     <div class="text-center mb-5">
@@ -71,7 +70,7 @@
             </div>
             <div class="mb-3">
                 <label for="disponibilidad" class="form-label"><i class="fas fa-users"></i> Disponibilidad de Asientos</label>
-                <input type="number" class="form-control" name="disponibilidad" value="{{ old('disponibilidad') }}" >
+                <input type="number" class="form-control" name="disponibilidad" value="{{ old('disponibilidad') }}" min="1">
                 @error('disponibilidad')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -105,7 +104,7 @@
             <h3 class="text-primary"><i class="fas fa-file-alt"></i> Política de Cancelación</h3>
             <div class="mb-3">
                 <label for="politica_cancelacion" class="form-label"><i class="fas fa-ban"></i> Detalles de la Política</label>
-                <textarea class="form-control" name="politica_cancelacion" rows="4" >{{ old('politica_cancelacion') }}</textarea>
+                <textarea class="form-control" name="politica_cancelacion" rows="4">{{ old('politica_cancelacion') }}</textarea>
                 @error('politica_cancelacion')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror

@@ -1,19 +1,13 @@
 @extends('layouts.admin')
-
 @section('contenido')
 <div class="container my-5">
-    <!-- Título Principal -->
     <div class="text-center mb-5">
         <h1 class="display-4 text-danger"><i class="fas fa-edit"></i> Editar Vuelo</h1>
         <p class="text-muted">Actualiza la información del vuelo seleccionado.</p>
     </div>
-
-    <!-- Formulario -->
     <form id="edit-flight-form" method="POST" action="{{ route('admin.vuelos.update', $vuelo->id) }}" class="shadow-lg p-4 bg-white rounded">
         @csrf
         @method('PUT')
-
-        <!-- Sección: Información del Vuelo -->
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-info-circle"></i> Información del Vuelo</h3>
             <div class="mb-3">
@@ -31,8 +25,6 @@
                 @enderror
             </div>
         </div>
-
-        <!-- Sección: Origen y Destino -->
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-map-marker-alt"></i> Origen y Destino</h3>
             <div class="mb-3">
@@ -50,8 +42,6 @@
                 @enderror
             </div>
         </div>
-
-        <!-- Sección: Fechas -->
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-calendar-alt"></i> Fechas del Vuelo</h3>
             <div class="mb-3">
@@ -69,8 +59,6 @@
                 @enderror
             </div>
         </div>
-
-        <!-- Sección: Detalles del Vuelo -->
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-list-alt"></i> Detalles del Vuelo</h3>
             <div class="mb-3">
@@ -88,8 +76,6 @@
                 @enderror
             </div>
         </div>
-
-        <!-- Sección: Clase y Escalas -->
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-suitcase-rolling"></i> Clase y Escalas</h3>
             <div class="mb-3">
@@ -124,8 +110,6 @@
                 @enderror
             </div>
         </div>
-
-        <!-- Botón de Confirmación -->
         <div class="text-center">
             <button type="button" id="confirm-edit" class="btn btn-danger btn-lg px-5">
                 <i class="fas fa-save"></i> Actualizar Vuelo
@@ -133,8 +117,6 @@
         </div>
     </form>
 </div>
-
-<!-- SweetAlert Script -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.getElementById('confirm-edit').addEventListener('click', function () {

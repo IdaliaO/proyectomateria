@@ -25,7 +25,7 @@
                 <div class="collapse navbar-collapse" id="navbarContenido">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
                         <li class="nav-item"><a href="{{ route('inicio') }}" class="nav-link">Inicio</a></li>
-                        <li class="nav-item"><a href="{{ route('buscar.vuelos') }}" class="nav-link">Buscar Vuelos</a></li>
+                        <li class="nav-item"><a href="{{ route('vuelos.buscar') }}" class="nav-link">Buscar Vuelos</a></li>
                         <li class="nav-item"><a href="{{ route('hoteles.buscar') }}" class="nav-link">Buscar Hoteles</a></li>
                         @if(session('autenticado'))
                             <li class="nav-item">

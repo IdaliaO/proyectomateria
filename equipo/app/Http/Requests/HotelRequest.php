@@ -21,11 +21,12 @@ class HotelRequest extends FormRequest
             'disponibilidad' => 'required|integer|min:1',
             'descripcion' => 'required|string',
             'politicas_cancelacion' => 'required|string',
-            'fotografia' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'servicios' => 'required|array',
-            'servicios.*' => 'exists:servicios,id', 
+            'fotografia' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'servicios' => 'nullable|array',
+            'servicios.*' => 'exists:servicios,id',
         ];
     }
+    
 
     public function messages()
     {

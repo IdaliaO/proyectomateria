@@ -1,28 +1,27 @@
 @extends('layouts.admin')
-@section('titulo', 'Editar Hotel')
+@section('titulo', 'Crear Hotel')
 @section('contenido')
 <div class="container my-5">
 
     <div class="text-center mb-5">
-        <h1 class="display-4 text-danger"><i class="fas fa-edit"></i> Editar Hotel</h1>
-        <p class="text-muted">Actualiza la información de este hotel con los detalles necesarios.</p>
+        <h1 class="display-4 text-danger"><i class="fas fa-plus-circle"></i> Crear Hotel</h1>
+        <p class="text-muted">Completa la información para agregar un nuevo hotel.</p>
     </div>
-    <form method="POST" action="{{ route('admin.hotel.update', $hotel->id) }}" enctype="multipart/form-data" class="shadow-lg p-4 bg-white rounded">
+    <form id="crear-hotel-form" method="POST" action="{{ route('admin.hotel.store') }}" enctype="multipart/form-data" class="shadow-lg p-4 bg-white rounded">
         @csrf
-        @method('PUT')
 
         <div class="mb-4">
             <h3 class="text-primary"><i class="fas fa-info-circle"></i> Información Básica</h3>
             <div class="mb-3">
                 <label for="nombre" class="form-label"><i class="fas fa-hotel"></i> Nombre del Hotel</label>
-                <input type="text" name="nombre" class="form-control" value="{{ old('nombre', $hotel->nombre) }}" >
+                <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" >
                 @error('nombre')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="ubicacion" class="form-label"><i class="fas fa-map-marker-alt"></i> Ubicación</label>
-                <input type="text" name="ubicacion" class="form-control" value="{{ old('ubicacion', $hotel->ubicacion) }}" >
+                <input type="text" name="ubicacion" class="form-control" value="{{ old('ubicacion') }}" >
                 @error('ubicacion')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -32,21 +31,21 @@
             <h3 class="text-primary"><i class="fas fa-list-alt"></i> Detalles del Hotel</h3>
             <div class="mb-3">
                 <label for="categoria" class="form-label"><i class="fas fa-star"></i> Categoría (Estrellas)</label>
-                <input type="number" name="categoria" class="form-control" value="{{ old('categoria', $hotel->categoria) }}" min="1" max="5" >
+                <input type="number" name="categoria" class="form-control" value="{{ old('categoria') }}" min="1" max="5" >
                 @error('categoria')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="precio_noche" class="form-label"><i class="fas fa-dollar-sign"></i> Precio por Noche</label>
-                <input type="number" name="precio_noche" class="form-control" value="{{ old('precio_noche', $hotel->precio_noche) }}" step="0.01" >
+                <input type="number" name="precio_noche" class="form-control" value="{{ old('precio_noche') }}" step="0.01" >
                 @error('precio_noche')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="disponibilidad" class="form-label"><i class="fas fa-check-circle"></i> Disponibilidad de Habitaciones</label>
-                <input type="number" name="disponibilidad" class="form-control" value="{{ old('disponibilidad', $hotel->disponibilidad) }}" min="1" >
+                <input type="number" name="disponibilidad" class="form-control" value="{{ old('disponibilidad') }}" min="1" >
                 @error('disponibilidad')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -56,8 +55,7 @@
             <h3 class="text-primary"><i class="fas fa-concierge-bell"></i> Servicios</h3>
             <div class="form-check">
                 @foreach($servicios as $servicio)
-                    <input type="checkbox" name="servicios[]" value="{{ $servicio->id }}" class="form-check-input" id="servicio_{{ $servicio->id }}"
-                    {{ in_array($servicio->id, old('servicios', $hotelServicios)) ? 'checked' : '' }}>
+                    <input type="checkbox" name="servicios[]" value="{{ $servicio->id }}" class="form-check-input" id="servicio_{{ $servicio->id }}">
                     <label class="form-check-label" for="servicio_{{ $servicio->id }}"><i class="fas fa-check text-success"></i> {{ $servicio->nombre }}</label><br>
                 @endforeach
             </div>
@@ -69,14 +67,14 @@
             <h3 class="text-primary"><i class="fas fa-file-alt"></i> Descripción y Políticas</h3>
             <div class="mb-3">
                 <label for="descripcion" class="form-label"><i class="fas fa-info-circle"></i> Descripción</label>
-                <textarea name="descripcion" class="form-control" rows="4" >{{ old('descripcion', $hotel->descripcion) }}</textarea>
+                <textarea name="descripcion" class="form-control" rows="4">{{ old('descripcion') }}</textarea>
                 @error('descripcion')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="mb-3">
                 <label for="politicas_cancelacion" class="form-label"><i class="fas fa-ban"></i> Políticas de Cancelación</label>
-                <textarea name="politicas_cancelacion" class="form-control" rows="4" >{{ old('politicas_cancelacion', $hotel->politicas_cancelacion) }}</textarea>
+                <textarea name="politicas_cancelacion" class="form-control" rows="4">{{ old('politicas_cancelacion') }}</textarea>
                 @error('politicas_cancelacion')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -94,9 +92,90 @@
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-danger btn-lg px-5">
-                <i class="fas fa-save"></i> Actualizar Hotel
+                <i class="fas fa-save"></i> Crear Hotel
             </button>
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('crear-hotel-form');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const url = form.getAttribute('action');
+            const method = form.getAttribute('method');
+
+            fetch(url, {
+                method: method,
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: data.success,
+                        confirmButtonColor: '#d33',
+                    }).then(() => {
+                        window.location.href = "{{ route('admin.hoteles.index') }}";
+                    });
+                } else if (data.error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.error,
+                        confirmButtonColor: '#d33',
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al procesar la solicitud. Por favor, inténtelo de nuevo.',
+                    confirmButtonColor: '#d33',
+                });
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+@if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#d33'
+            }).then(() => {
+                window.location.href = "{{ route('admin.hoteles.index') }}";
+            });
+        });
+    </script>
+@endif
+
+@if(session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+                confirmButtonColor: '#d33'
+            });
+        });
+    </script>
+@endif
+
+
 @endsection
+

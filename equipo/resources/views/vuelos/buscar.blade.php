@@ -3,7 +3,7 @@
 @section('contenido')
 <div class="container my-4">
     <h2 class="mb-4">Buscar Vuelos</h2>
-    <form method="GET" action="{{ route('resultados.vuelos') }}">
+    <form method="GET" action="{{ route('vuelos.resultados') }}">
         <div class="row">
             <div class="col-md-6">
                 <label for="origen" class="form-label">Origen</label>
@@ -20,23 +20,23 @@
                 @enderror
             </div>
             <div class="col-md-6">
-                <label for="fecha_salida" class="form-label">Fecha de salida</label>
-                <input type="date" name="fecha_salida" class="form-control" value="{{ old('fecha_salida') }}">
+                <label for="fecha_salida" class="form-label">Fecha y Hora de Salida</label>
+                <input type="datetime-local" name="fecha_salida" class="form-control" value="{{ old('fecha_salida') }}">
                 @error('fecha_salida')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="col-md-6">
-                <label for="fecha_regreso" class="form-label">Fecha de regreso (opcional)</label>
-                <input type="date" name="fecha_regreso" class="form-control" value="{{ old('fecha_regreso') }}">
-                @error('fecha_regreso')
+                <label for="fecha_llegada" class="form-label">Fecha y Hora de Llegada (opcional)</label>
+                <input type="datetime-local" name="fecha_llegada" class="form-control" value="{{ old('fecha_llegada') }}">
+                @error('fecha_llegada')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
             <div class="col-md-4">
-                <label for="pasajeros" class="form-label">Número de Pasajeros</label>
-                <input type="number" name="pasajeros" class="form-control" min="1" value="{{ old('pasajeros') }}">
-                @error('pasajeros')
+                <label for="disponibilidad" class="form-label">Número de Pasajeros</label>
+                <input type="number" name="disponibilidad" class="form-control" min="1" value="{{ old('disponibilidad') }}">
+                @error('disponibilidad')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -60,7 +60,7 @@
             </div>
             <div class="col-md-6">
                 <label for="precio" class="form-label">Precio Máximo</label>
-                <input type="number" name="precio" class="form-control" min="0" value="{{ old('precio') }}">
+                <input type="number" name="precio" class="form-control" min="0" value="{{ old('precio') }}" step="0.01">
                 @error('precio')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -70,8 +70,7 @@
                 <select name="escalas" class="form-select">
                     <option value="">Cualquiera</option>
                     <option value="0" {{ old('escalas') == '0' ? 'selected' : '' }}>Sin escalas</option>
-                    <option value="1" {{ old('escalas') == '1' ? 'selected' : '' }}>1 Escala</option>
-                    <option value="2" {{ old('escalas') == '2' ? 'selected' : '' }}>2 o más escalas</option>
+                    <option value="1" {{ old('escalas') == '1' ? 'selected' : '' }}>Con escalas</option>
                 </select>
                 @error('escalas')
                     <div class="text-danger">{{ $message }}</div>

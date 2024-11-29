@@ -52,13 +52,9 @@ class UsuarioController extends Controller
     public function autenticar(LoginUsuarioRequest $request)
     {
         $validated = $request->validated();
-
-        // Buscar el usuario por email
         $usuario = DB::table('users')
             ->where('email', $validated['email'])
             ->first();
-
-        // Verificar si la contraseña es correcta
         if ($usuario && Hash::check($validated['password'], $usuario->password)) {
             Session::put('autenticado', true);
             Session::put('usuario', [

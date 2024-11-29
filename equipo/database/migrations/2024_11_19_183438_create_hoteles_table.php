@@ -13,7 +13,7 @@ class CreateHotelesTable extends Migration
             $table->string('nombre');
             $table->string('ubicacion');
             $table->integer('categoria'); 
-            $table->decimal('precio_noche', 8, 2);
+            $table->decimal('precio_noche');
             $table->integer('disponibilidad'); 
             $table->text('descripcion')->nullable();
             $table->text('politicas_cancelacion')->nullable();
