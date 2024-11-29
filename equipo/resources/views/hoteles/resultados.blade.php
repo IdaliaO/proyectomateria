@@ -12,20 +12,20 @@
                     <input type="hidden" name="destino" value="{{ request('destino') }}">
 
                     <label for="precio_noche_max" class="form-label">Tu presupuesto (por noche)</label>
-                    <input type="number" class="form-control" name="precio_noche_max" placeholder="Precio máximo" value="{{ request('precio_noche_max') }}">
+                    <input type="number" class="form-control" name="precio_noche_max" placeholder="Precio máximo" value="{{ old('precio_noche_max') }}">
 
                     <h6 class="mt-4">Categoría (Estrellas)</h6>
                     <div class="mb-3">
                         @for ($i = 1; $i <= 5; $i++)
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="categoria" value="{{ $i }}" id="estrella_{{ $i }}" {{ request('categoria') == $i ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="categoria" value="{{ $i }}" id="estrella_{{ $i }}" {{ old('categoria') == $i ? 'checked' : '' }}>
                                 <label class="form-check-label" for="estrella_{{ $i }}">
                                     {{ $i }} Estrella{{ $i > 1 ? 's' : '' }}
                                 </label>
                             </div>
                         @endfor
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="categoria" value="" id="categoria_todas" {{ is_null(request('categoria')) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="radio" name="categoria" value="" id="categoria_todas" {{ is_null(old('categoria')) ? 'checked' : '' }}>
                             <label class="form-check-label" for="categoria_todas">Todas las categorías</label>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                     <h6 class="mt-4">Servicios</h6>
                     @foreach($servicios as $servicio)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="servicios[]" value="{{ $servicio->id }}" id="servicio_{{ $servicio->id }}" {{ in_array($servicio->id, request('servicios', [])) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" name="servicios[]" value="{{ $servicio->id }}" id="servicio_{{ $servicio->id }}" {{ in_array($servicio->id, old('servicios', [])) ? 'checked' : '' }}>
                             <label class="form-check-label" for="servicio_{{ $servicio->id }}">{{ $servicio->nombre }}</label>
                         </div>
                     @endforeach

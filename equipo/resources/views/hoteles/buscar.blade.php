@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-6">
                 <label for="precio_maximo" class="form-label">Precio Máximo</label>
-                <input type="number" class="form-control" name="precio_noche_max" placeholder="Precio máximo" value="{{ request('precio_noche_max') }}">
+                <input type="number" class="form-control" name="precio_noche_max" placeholder="Precio máximo" value="{{ old('precio_noche_max') }}">
                 </div>
             <div class="mb-3">
             <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>

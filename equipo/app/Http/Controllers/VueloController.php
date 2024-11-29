@@ -12,7 +12,6 @@ class VueloController extends Controller
     {
         return view('vuelos.buscar');
     }
-
     public function resultadosVuelos(Request $request)
 {
     $query = DB::table('vuelos');
@@ -24,7 +23,13 @@ class VueloController extends Controller
         $query->where('destino', 'like', '%' . $request->destino . '%');
     }
     if ($request->filled('fecha_salida')) {
-        $query->whereDate('fecha_salida', '=', $request->fecha_salida);
+        $query->where('fecha_salida', '=', $request->fecha_salida);
+    }
+    if ($request->filled('fecha_llegada')) {
+        $query->where('fecha_llegada', '=', $request->fecha_llegada);
+    }
+    if ($request->filled('disponibilidad')) {
+        $query->where('disponibilidad', '>=', $request->disponibilidad);
     }
     if ($request->filled('clase')) {
         $query->where('clase', $request->clase);
@@ -35,7 +40,7 @@ class VueloController extends Controller
     if ($request->filled('precio')) {
         $query->where('precio', '<=', $request->precio);
     }
-    if ($request->filled('escalas')) {
+    if (!is_null($request->escalas)) {
         $query->where('escalas', $request->escalas);
     }
 
@@ -44,6 +49,5 @@ class VueloController extends Controller
     return view('vuelos.resultados', compact('resultados'));
 }
 
-    
     
 }

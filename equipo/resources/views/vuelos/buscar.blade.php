@@ -27,16 +27,9 @@
                 @enderror
             </div>
             <div class="col-md-6">
-                <label for="fecha_llegada" class="form-label">Fecha y Hora de Llegada (opcional)</label>
+                <label for="fecha_llegada" class="form-label">Fecha y Hora de Llegada</label>
                 <input type="datetime-local" name="fecha_llegada" class="form-control" value="{{ old('fecha_llegada') }}">
                 @error('fecha_llegada')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="col-md-4">
-                <label for="disponibilidad" class="form-label">Número de Pasajeros</label>
-                <input type="number" name="disponibilidad" class="form-control" min="1" value="{{ old('disponibilidad') }}">
-                @error('disponibilidad')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -83,3 +76,4 @@
     </form>
 </div>
 @endsection
+
