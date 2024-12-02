@@ -101,6 +101,7 @@ class AdministradorController extends Controller
                 'apellido' => $request->apellido,
                 'email' => $request->email,
                 'telefono' => $request->telefono,
+                
                 'password' => Hash::make($request->password),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -261,10 +262,12 @@ public function crearHotel(HotelRequest $request)
             'ubicacion' => $request->ubicacion,
             'categoria' => $request->categoria,
             'precio_noche' => $request->precio_noche,
+            'distancia_centro'=>$request->distancia_centro,
             'disponibilidad' => $request->disponibilidad,
             'descripcion' => $request->descripcion,
             'politicas_cancelacion' => $request->politicas_cancelacion,
             'fotografia' => $fotografiaPath,
+           
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -307,10 +310,12 @@ public function actualizarHotel(HotelRequest $request, $id)
             'nombre' => $request->nombre,
             'ubicacion' => $request->ubicacion,
             'categoria' => $request->categoria,
+            'distancia_centro'=>$request->distancia_centro,
             'precio_noche' => $request->precio_noche,
             'disponibilidad' => $request->disponibilidad,
             'descripcion' => $request->descripcion,
             'politicas_cancelacion' => $request->politicas_cancelacion,
+            
             'updated_at' => now(),
         ]);
 

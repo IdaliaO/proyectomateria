@@ -44,6 +44,16 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="mb-3">
+                <label for="distancia_centro" class="form-label"><i class="fas fa-map-marker-alt"></i> Distancia al centro (km)</label>
+                <input type="number" name="distancia_centro" class="form-control" value="{{ old('distancia_centro', $hotel->distancia_centro) }}" min="1" >
+                @error('distancia_centro')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+
             <div class="mb-3">
                 <label for="disponibilidad" class="form-label"><i class="fas fa-check-circle"></i> Disponibilidad de Habitaciones</label>
                 <input type="number" name="disponibilidad" class="form-control" value="{{ old('disponibilidad', $hotel->disponibilidad) }}" min="1" >

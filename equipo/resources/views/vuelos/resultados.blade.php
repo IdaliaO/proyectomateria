@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('titulo', 'Resultados de Vuelos')
 @section('contenido')
-<div class="container my-4">
+<div class="container my-5">
     <div class="row">
         <div class="col-md-3">
-            <div class="card p-3">
-                <h4>Filtros</h4>
+            <div class="card shadow-lg border-0 p-3" style="border-radius: 15px;">
+                <h4 class="text-primary"><i class="fas fa-filter"></i> Filtros</h4>
                 <form method="GET" action="{{ route('vuelos.resultados') }}">
                     <input type="hidden" name="origen" value="{{ request('origen') }}">
                     <input type="hidden" name="destino" value="{{ request('destino') }}">
@@ -14,8 +14,9 @@
                     <input type="hidden" name="disponibilidad" value="{{ request('disponibilidad') }}">
                     <input type="hidden" name="clase" value="{{ request('clase') }}">
                     <input type="hidden" name="aerolinea" value="{{ request('aerolinea') }}">
+
                     <div class="mb-3">
-                        <label for="escalas" class="form-label">Escalas</label>
+                        <label for="escalas" class="form-label"><i class="fas fa-exchange-alt"></i> Escalas</label>
                         <div>
                             <input type="radio" name="escalas" value="" {{ request('escalas') === null ? 'checked' : '' }}> Cualquiera
                         </div>
@@ -27,42 +28,46 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="aerolinea" class="form-label">Aerolínea</label>
-                        <input type="text" name="aerolinea" class="form-control" value="{{ request('aerolinea') }}">
+                        <label for="aerolinea" class="form-label"><i class="fas fa-plane"></i> Aerolínea</label>
+                        <input type="text" name="aerolinea" class="form-control" value="{{ request('aerolinea') }}" placeholder="Nombre de la aerolínea">
                     </div>
                     <div class="mb-3">
-                        <label for="precio" class="form-label">Precio Máximo</label>
-                        <input type="number" name="precio" class="form-control" value="{{ request('precio') }}">
+                        <label for="precio" class="form-label"><i class="fas fa-dollar-sign"></i> Precio Máximo</label>
+                        <input type="number" name="precio" class="form-control" value="{{ request('precio') }}" placeholder="Ingrese un presupuesto">
                     </div>
                     <div class="mb-3">
-                        <label for="hora_salida" class="form-label">Horario de Salida</label>
+                        <label for="hora_salida" class="form-label"><i class="fas fa-clock"></i> Horario de Salida</label>
                         <input type="time" name="hora_salida" class="form-control" value="{{ request('hora_salida') }}">
                     </div>
                     <div class="mb-3">
-                        <label for="hora_llegada" class="form-label">Horario de Llegada</label>
+                        <label for="hora_llegada" class="form-label"><i class="fas fa-clock"></i> Horario de Llegada</label>
                         <input type="time" name="hora_llegada" class="form-control" value="{{ request('hora_llegada') }}">
                     </div>
-                    <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100"><i class="fas fa-filter"></i> Aplicar Filtros</button>
+                    </div>
                 </form>
             </div>
         </div>
 
         <div class="col-md-9">
-            <h2>Resultados de Búsqueda de Vuelos</h2>
+            <h2 class="text-primary mb-4"><i class="fas fa-plane-departure"></i> Resultados de Búsqueda</h2>
             @if($resultados->isEmpty())
-                <p>No se encontraron vuelos para los criterios de búsqueda especificados.</p>
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-exclamation-circle"></i> No se encontraron vuelos para los criterios de búsqueda especificados.
+                </div>
             @else
-                <table class="table table-striped">
-                    <thead>
+                <table class="table table-hover">
+                    <thead class="bg-primary text-white">
                         <tr>
-                            <th>Número de Vuelo</th>
-                            <th>Aerolínea</th>
-                            <th>Horario</th>
-                            <th>Duración del Vuelo</th>
-                            <th>Precio por Pasajero</th>
-                            <th>Escalas</th>
-                            <th>Disponibilidad</th>
-                            <th>Acción</th>
+                            <th><i class="fas fa-barcode"></i> Número de Vuelo</th>
+                            <th><i class="fas fa-plane"></i> Aerolínea</th>
+                            <th><i class="fas fa-clock"></i> Horario</th>
+                            <th><i class="fas fa-hourglass-half"></i> Duración</th>
+                            <th><i class="fas fa-dollar-sign"></i> Precio</th>
+                            <th><i class="fas fa-exchange-alt"></i> Escalas</th>
+                            <th><i class="fas fa-check-circle"></i> Disponibilidad</th>
+                            <th><i class="fas fa-cart-plus"></i> Acción</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,9 +79,17 @@
                                 <td>{{ \Carbon\Carbon::parse($vuelo->fecha_salida)->diffInHours(\Carbon\Carbon::parse($vuelo->fecha_llegada)) }} horas</td>
                                 <td>${{ number_format($vuelo->precio, 2) }}</td>
                                 <td>{{ $vuelo->escalas ? 'Con escalas' : 'Sin escalas' }}</td>
-                                <td>{{ $vuelo->disponibilidad > 0 ? 'Disponible' : 'No disponible' }}</td>
                                 <td>
-                                    <button class="btn btn-success" {{ $vuelo->disponibilidad > 0 ? '' : 'disabled' }}>Agregar al Carrito</button>
+                                    @if($vuelo->disponibilidad > 0)
+                                        <span class="badge bg-success">Disponible</span>
+                                    @else
+                                        <span class="badge bg-danger">No disponible</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <button class="btn btn-success btn-sm" {{ $vuelo->disponibilidad > 0 ? '' : 'disabled' }}>
+                                        <i class="fas fa-cart-plus"></i> Agregar
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -87,4 +100,3 @@
     </div>
 </div>
 @endsection
-

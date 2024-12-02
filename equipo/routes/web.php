@@ -4,6 +4,8 @@ use App\Http\Controllers\VueloController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\ReservacionController;
 use App\Http\Controllers\AdministradorController;
+use App\Http\Controllers\ComentarioController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [UsuarioController::class, 'inicio'])->name('inicio');
@@ -15,18 +17,29 @@ Route::post('/registro/enviar', [UsuarioController::class, 'registrar'])->name('
 
 
 //NO MODIFICAR solo es login
-Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login.mostrar');
+Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login');
 Route::post('/login', [UsuarioController::class, 'autenticar'])->name('login.enviar');
 Route::post('/logout', [UsuarioController::class, 'logout'])->name('logout');
+
 
 // Rutas para hoteles NO MODIFICAR
 Route::get('/hoteles/buscar', [HotelController::class, 'buscarHoteles'])->name('hoteles.buscar');
 Route::get('/hoteles/resultados', [HotelController::class, 'resultadosHoteles'])->name('hoteles.resultados');
 Route::get('/hoteles/detalle/{id}', [HotelController::class, 'mostrarDetalle'])->name('hoteles.detalle');
-
+Route::post('/comentarios', [ComentarioController::class, 'guardar'])->name('comentarios.guardar');
 // Rutas para vuelos NO MODIFICAR
 Route::get('/vuelos/buscar', [VueloController::class, 'buscarVuelos'])->name('vuelos.buscar');
 Route::get('/vuelos/resultados', [VueloController::class, 'resultadosVuelos'])->name('vuelos.resultados');
+
+// RESERVACION HOTEL NO MODIFICAR
+
+Route::get('/reservacion/{hotel_id}', [ReservacionController::class, 'mostrarFormularioReservacion'])->name('reservaciones.formulario');
+Route::post('/reservacion/{hotel_id}/confirmar', [ReservacionController::class, 'confirmarReservacion'])->name('reservaciones.confirmar');
+Route::get('/carrito', [ReservacionController::class, 'mostrarCarrito'])->name('carrito');
+Route::post('/reservaciones/{id}/cancelar', [ReservacionController::class, 'cancelar'])->name('reservaciones.cancelar');
+Route::post('/reservaciones/{id}/confirmar-pago', [ReservacionController::class, 'confirmarPago'])->name('reservaciones.confirmarPago');
+
+
 
 // Rutas de administración funcionan con bd NO MODIFICAR
 Route::prefix('admin')->group(function () {
@@ -65,25 +78,23 @@ Route::put('/{id}', [AdministradorController::class, 'actualizarHotel'])->name('
 Route::delete('/{id}', [AdministradorController::class, 'destroy'])->name('admin.hotel.destroy');
 Route::get('/{id}/detalles', [AdministradorController::class, 'verDetallesHotel'])->name('admin.hotel.detalles');
 
+//X REVISAR
+Route::get('/reservaciones', [AdministradorController::class, 'listarReservaciones'])->name('admin.reservaciones.index');
+Route::delete('/reservacion/{id}', [AdministradorController::class, 'eliminarReservacion'])->name('admin.reservacion.destroy');
 });
 });
 
 
 
 
-// x REVISAR
-Route::middleware('auth')->group(function () {
-Route::get('/reservacion/{hotel_id}', [ReservacionController::class, 'mostrarFormularioReservacion'])->name('reservaciones.formulario');
-Route::post('/reservacion/{hotel_id}/confirmar', [ReservacionController::class, 'confirmarReservacion'])->name('reservaciones.confirmar');
-});
-// Rutas para gestionar reservaciones X REVISAR
-Route::get('/reservacion/{hotel_id}', [ReservacionController::class, 'mostrarFormularioReservacion'])->name('reservaciones.formulario');
-Route::get('/reservacion/{id}', [ReservacionController::class, 'crear'])->name('reservacion.crear');
-Route::get('reservaciones', [AdministradorController::class, 'listarReservaciones'])->name('admin.reservaciones.index');
-Route::delete('reservacion/{id}', [AdministradorController::class, 'eliminarReservacion'])->name('admin.reservacion.destroy');
+
+
+
+// Rutas para gestionar reservaciones (para administradores)
+
+
+
+
 // Ruta para generar reportes
 Route::get('reportes', [AdministradorController::class, 'generarReporte'])->name('admin.reportes');
-// Rutas para reservaciones
-Route::post('/reservar', [ReservacionController::class, 'agregarAlCarrito'])->name('reservar.agregar');
-Route::get('/carrito', [ReservacionController::class, 'verCarrito'])->name('carrito');
-Route::post('/confirmar', [ReservacionController::class, 'confirmarReservacion'])->name('reservar.confirmar');
+

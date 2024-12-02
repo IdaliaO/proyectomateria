@@ -13,7 +13,7 @@ class HotelController extends Controller
      */
     public function buscarHoteles()
     {
-        $servicios = DB::table('servicios')->get(); // Cargar todos los servicios
+        $servicios = DB::table('servicios')->get(); 
         return view('hoteles.buscar', compact('servicios'));
     }
 
@@ -22,15 +22,28 @@ class HotelController extends Controller
      */
     public function resultadosHoteles(BuscarHotelRequest $request)
 {
-    $query = DB::table('hoteles')->select('id', 'nombre', 'ubicacion', 'precio_noche', 'categoria', 'fotografia');
+    $query = DB::table('hoteles')->select(
+        'id',
+        'nombre',
+        'ubicacion',
+        'precio_noche',
+        'categoria',
+        'fotografia',
+        'distancia_centro',
+        'disponibilidad' 
+    );
+
     if ($request->filled('destino')) {
         $query->where('ubicacion', 'LIKE', '%' . $request->destino . '%');
     }
     if ($request->filled('precio_noche_max')) {
-        $query->where('precio_noche', '<=', (float)$request->precio_noche_max);
+        $query->where('precio_noche', '<=', (float) $request->precio_noche_max);
     }
     if ($request->filled('categoria')) {
         $query->where('categoria', $request->categoria);
+    }
+    if ($request->filled('distancia_max')) {
+        $query->where('distancia_centro', '<=', $request->distancia_max);
     }
     if ($request->filled('servicios')) {
         $query->whereExists(function ($subQuery) use ($request) {
@@ -42,11 +55,11 @@ class HotelController extends Controller
     }
 
     $resultados = $query->get();
-
     $servicios = DB::table('servicios')->get();
 
     return view('hoteles.resultados', compact('resultados', 'servicios'));
 }
+
 
     /**
      * Muestra el detalle de un hotel específico.
@@ -54,17 +67,25 @@ class HotelController extends Controller
     public function mostrarDetalle($id)
     {
         $hotel = DB::table('hoteles')->where('id', $id)->first();
-
+    
         if (!$hotel) {
             return redirect()->route('hoteles.buscar')->with('error', 'Hotel no encontrado.');
         }
-
+    
         $servicios = DB::table('hotel_servicio')
             ->join('servicios', 'hotel_servicio.servicio_id', '=', 'servicios.id')
             ->where('hotel_servicio.hotel_id', $id)
             ->select('servicios.nombre')
             ->get();
-
-        return view('hoteles.detalle', compact('hotel', 'servicios'));
+    
+        $comentarios = DB::table('comentarios')
+            ->join('users', 'comentarios.user_id', '=', 'users.id') 
+            ->where('comentarios.hotel_id', $id)
+            ->orderBy('comentarios.created_at', 'desc')
+            ->select('users.nombre', 'comentarios.comentario', 'comentarios.calificacion', 'comentarios.created_at')
+            ->get();
+    
+        return view('hoteles.detalle', compact('hotel', 'servicios', 'comentarios'));
     }
+    
 }
