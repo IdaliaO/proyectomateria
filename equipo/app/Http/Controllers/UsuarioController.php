@@ -69,11 +69,10 @@ class UsuarioController extends Controller
         return back()->with('error', 'Credenciales incorrectas.');
     }
 
-    public function logout()
-    {
-        Session::forget('autenticado');
-        Session::forget('usuario');
+    public function logout(Request $request)
+{
+    Session::flush(); 
+    return redirect()->route('login.mostrar')->with('success', 'Sesión cerrada con éxito.');
+}
 
-        return redirect()->route('inicio')->with('success', 'Sesión cerrada correctamente.');
-    }
 }

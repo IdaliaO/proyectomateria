@@ -15,9 +15,8 @@ Route::get('/registro', [UsuarioController::class, 'mostrarRegistro'])->name('re
 Route::post('/registro/enviar', [UsuarioController::class, 'registrar'])->name('registro.enviar');
 
 
-
 //NO MODIFICAR solo es login
-Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login');
+Route::get('/login', [UsuarioController::class, 'mostrarLogin'])->name('login.mostrar');
 Route::post('/login', [UsuarioController::class, 'autenticar'])->name('login.enviar');
 Route::post('/logout', [UsuarioController::class, 'logout'])->name('logout');
 
