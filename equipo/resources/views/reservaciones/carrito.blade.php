@@ -1,57 +1,48 @@
 @extends('layouts.app')
+
 @section('titulo', 'Carrito de Reservaciones')
+
 @section('contenido')
 <div class="container my-5">
-    <div class="text-center mb-4">
-        <h1 class="display-5 text-primary"><i class="fas fa-shopping-cart"></i> Carrito de Reservaciones</h1>
-        <p class="text-muted">Revisa y gestiona tus reservaciones pendientes.</p>
-    </div>
+    <h2>Tu Carrito de Reservaciones</h2>
 
-    @if($reservaciones->isEmpty())
-        <div class="text-center">
-            <p class="text-muted">No tienes reservaciones pendientes.</p>
-            <a href="{{ route('inicio') }}" class="btn btn-primary btn-lg"><i class="fas fa-search"></i> Explorar Hoteles</a>
+    <h3>Reservaciones de Hoteles</h3>
+    @if ($reservacionesHoteles->isEmpty())
+        <div class="alert alert-warning">
+            No tienes reservaciones de hoteles.
         </div>
     @else
-        <div class="card shadow-lg border-0">
-            <div class="card-body p-4">
-                <table class="table table-hover">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th><i class="fas fa-hotel"></i> Hotel</th>
-                            <th><i class="fas fa-calendar-alt"></i> Fecha de Inicio</th>
-                            <th><i class="fas fa-calendar-alt"></i> Fecha de Fin</th>
-                            <th><i class="fas fa-door-closed"></i> Habitaciones</th>
-                            <th><i class="fas fa-moon"></i> Total Noches</th>
-                            <th><i class="fas fa-dollar-sign"></i> Total a Pagar</th>
-                            <th><i class="fas fa-cogs"></i> Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($reservaciones as $reservacion)
-                            <tr>
-                                <td>{{ $reservacion->hotel_nombre }}</td>
-                                <td>{{ \Carbon\Carbon::parse($reservacion->fecha_inicio)->format('d/m/Y') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($reservacion->fecha_fin)->format('d/m/Y') }}</td>
-                                <td>{{ $reservacion->habitaciones ?? 'N/A' }}</td>
-                                <td>{{ $reservacion->total_dias }}</td>
-                                <td>${{ number_format($reservacion->costo_total, 2) }}</td>
-                                <td>
-                                    <form action="{{ route('reservaciones.cancelar', ['id' => $reservacion->id]) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Cancelar</button>
-                                    </form>
-                                    <form action="{{ route('reservaciones.confirmarPago', ['id' => $reservacion->id]) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-credit-card"></i> Pagar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+        <ul class="list-group">
+            @foreach ($reservacionesHoteles as $reservacion)
+                <li class="list-group-item">
+                    <strong>Hotel:</strong> {{ $reservacion->hotel_nombre }} <br>
+                    <strong>Precio por noche:</strong> ${{ number_format($reservacion->precio_noche, 2) }} <br>
+                    <strong>Fecha de reserva:</strong> {{ \Carbon\Carbon::parse($reservacion->created_at)->format('d-m-Y') }} <br>
+                    <strong>Adultos:</strong> {{ $reservacion->adultos }} <br>
+                    <strong>Niños:</strong> {{ $reservacion->ninos }} <br>
+                    <strong>Noches:</strong> {{ $reservacion->noches }} <br>
+                    <strong>Total:</strong> ${{ number_format($reservacion->precio_noche * $reservacion->adultos * $reservacion->noches, 2) }}
+                </li>
+            @endforeach
+        </ul>
+    @endif
+
+    <h3>Reservaciones de Vuelos</h3>
+    @if ($reservacionesVuelos->isEmpty())
+        <div class="alert alert-warning">
+            No tienes reservaciones de vuelos.
         </div>
+    @else
+        <ul class="list-group">
+            @foreach ($reservacionesVuelos as $reservacion)
+                <li class="list-group-item">
+                    <strong>Vuelo:</strong> {{ $reservacion->numero_vuelo }} <br>
+                    <strong>Aerolínea:</strong> {{ $reservacion->aerolinea }} <br>
+                    <strong>Precio:</strong> ${{ number_format($reservacion->precio, 2) }} <br>
+                    <strong>Fecha de vuelo:</strong> {{ \Carbon\Carbon::parse($reservacion->created_at)->format('d-m-Y') }} <br>
+                </li>
+            @endforeach
+        </ul>
     @endif
 </div>
 @endsection

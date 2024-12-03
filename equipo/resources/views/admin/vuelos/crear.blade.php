@@ -138,7 +138,6 @@
                     text: 'Vuelo creado correctamente.',
                     confirmButtonColor: '#d33'
                 }).then(() => {
-                    // Redireccionar al índice de vuelos después del éxito
                     window.location.href = "{{ route('admin.vuelos.index') }}";
                 });
             },

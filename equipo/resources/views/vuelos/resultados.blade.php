@@ -71,29 +71,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($resultados as $vuelo)
-                            <tr>
-                                <td>{{ $vuelo->numero_vuelo }}</td>
-                                <td>{{ $vuelo->aerolinea }}</td>
-                                <td>{{ \Carbon\Carbon::parse($vuelo->fecha_salida)->format('d-m-Y H:i') }} - {{ \Carbon\Carbon::parse($vuelo->fecha_llegada)->format('d-m-Y H:i') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($vuelo->fecha_salida)->diffInHours(\Carbon\Carbon::parse($vuelo->fecha_llegada)) }} horas</td>
-                                <td>${{ number_format($vuelo->precio, 2) }}</td>
-                                <td>{{ $vuelo->escalas ? 'Con escalas' : 'Sin escalas' }}</td>
-                                <td>
-                                    @if($vuelo->disponibilidad > 0)
-                                        <span class="badge bg-success">Disponible</span>
-                                    @else
-                                        <span class="badge bg-danger">No disponible</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <button class="btn btn-success btn-sm" {{ $vuelo->disponibilidad > 0 ? '' : 'disabled' }}>
-                                        <i class="fas fa-cart-plus"></i> Agregar
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
+    @foreach($resultados as $vuelo)
+        <tr>
+            <td>{{ $vuelo->numero_vuelo }}</td>
+            <td>{{ $vuelo->aerolinea }}</td>
+            <td>{{ \Carbon\Carbon::parse($vuelo->fecha_salida)->format('d-m-Y H:i') }} - {{ \Carbon\Carbon::parse($vuelo->fecha_llegada)->format('d-m-Y H:i') }}</td>
+            <td>{{ \Carbon\Carbon::parse($vuelo->fecha_salida)->diffInHours(\Carbon\Carbon::parse($vuelo->fecha_llegada)) }} horas</td>
+            <td>${{ number_format($vuelo->precio, 2) }}</td>
+            <td>{{ $vuelo->escalas ? 'Con escalas' : 'Sin escalas' }}</td>
+            <td>
+                @if($vuelo->disponibilidad > 0)
+                    <span class="badge bg-success">Disponible</span>
+                @else
+                    <span class="badge bg-danger">No disponible</span>
+                @endif
+            </td>
+            <td>
+                <form action="{{ route('agregar.reservacion') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="vuelo_id" value="{{ $vuelo->id }}">
+                    <button type="submit" class="btn btn-success btn-sm" {{ $vuelo->disponibilidad > 0 ? '' : 'disabled' }}>
+                        <i class="fas fa-cart-plus"></i> Agregar
+                    </button>
+                </form>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
                 </table>
             @endif
         </div>

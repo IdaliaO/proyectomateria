@@ -5,8 +5,8 @@ use App\Http\Controllers\HotelController;
 use App\Http\Controllers\ReservacionController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\ComentarioController;
-
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', [UsuarioController::class, 'inicio'])->name('inicio');
 
@@ -90,6 +90,13 @@ Route::delete('/reservacion/{id}', [AdministradorController::class, 'eliminarRes
 
 
 // Rutas para gestionar reservaciones (para administradores)
+
+Route::post('/agregar-reservacion', [ReservacionController::class, 'agregar'])->name('agregar.reservacion');
+// routes/web.php
+
+
+
+// Ruta de inicio de sesión
 
 
 

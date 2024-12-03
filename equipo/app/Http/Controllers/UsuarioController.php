@@ -70,9 +70,10 @@ class UsuarioController extends Controller
     }
 
     public function logout(Request $request)
-{
-    Session::flush(); 
-    return redirect()->route('login.mostrar')->with('success', 'Sesión cerrada con éxito.');
-}
+    {
+        Session::flush(); 
+        return redirect()->route('login.mostrar')->with('success', 'Sesión cerrada con éxito.');
+    }
+    
 
 }
